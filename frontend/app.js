@@ -104,7 +104,6 @@ const rechercherNoeud = () => {
     
     const lowerSearchTerm = searchTerm.toLowerCase();
 
-    // Chercher par ID (exact) ou par Nom (contient)
     const nodeToFind = cy.elements().filter(node => {
         if (!node.isNode()) return false;
         const idMatch = node.data('id') === searchTerm;
