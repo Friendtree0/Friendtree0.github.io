@@ -1,4 +1,4 @@
-/* Fichier : frontend/style.css (CODE COMPLET) */
+/* Fichier : frontend/style.css (CODE COMPLET FINAL) */
 
 /* --- RESET & FOND (Discord Theme) --- */
 body {
@@ -18,6 +18,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap; /* Permet aux boutons de passer à la ligne si l'écran est petit */
 }
 
 header h1 {
@@ -26,16 +27,22 @@ header h1 {
     margin: 0;
 }
 
+#controls {
+    display: flex;
+    gap: 10px; /* Espace entre les boutons */
+    margin-top: 5px;
+}
+
 #controls button {
     background-color: #5865f2; /* Bleu Discord */
     color: white;
     border: none;
     padding: 10px 15px;
-    margin-left: 10px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.9em;
     transition: background-color 0.2s;
+    white-space: nowrap; /* Empêche les boutons de se couper */
 }
 
 #controls button:hover {
@@ -56,7 +63,8 @@ header h1 {
 #main-container {
     display: flex;
     position: relative;
-    height: calc(100vh - 145px); /* Hauteur calculée pour laisser de la place au header/nav/status */
+    /* Hauteur calculée: 100vh - (header + nav + status) */
+    height: calc(100vh - 145px); 
     min-height: 500px;
 }
 
@@ -88,7 +96,7 @@ header h1 {
     margin-top: 0;
     padding-bottom: 5px;
     border-bottom: 1px solid #4f545c;
-    cursor: move; /* Cible pour le drag */
+    cursor: move; 
 }
 
 #details-content p {
@@ -107,9 +115,17 @@ header h1 {
     font-family: 'Consolas', monospace;
     font-size: 0.85em;
     color: #d1d2d3;
-    user-select: all; /* Permet de copier facilement l'ID */
+    user-select: all; 
     cursor: text;
 }
+
+/* Boutons Localiser/Trajet dans le panneau de détails */
+.draggable-panel button {
+    margin-top: 5px;
+    font-size: 0.8em;
+    padding: 6px 10px;
+}
+
 
 /* --- NAVIGATION ET PAGES D'INFORMATION (CONFIDENTIALITE/TUTORIEL) --- */
 
@@ -118,7 +134,7 @@ header h1 {
     padding: 10px 0;
     margin-bottom: 20px;
     border-bottom: 1px solid #4f545c;
-    background-color: #2c2f33; /* Couleur de fond Discord pour la barre */
+    background-color: #2c2f33; 
 }
 
 .main-nav a {
@@ -139,7 +155,6 @@ header h1 {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    /* Style de centrage pour les pages d'info */
     max-width: 800px;
     margin: 30px auto;
 }
@@ -158,4 +173,20 @@ header h1 {
 
 #info-container ul, #info-container ol {
     padding-left: 20px;
+}
+
+/* --- CYTOSCAPE CLASSES POUR LES FONCTIONS AVANCÉES --- */
+
+/* Style pour mettre en évidence un nœud (Localiser et Trajet) */
+#cy .highlighted {
+    border-width: 5px !important; 
+    border-color: #ffcc00 !important; /* Jaune vif pour le focus */
+    z-index: 100;
+}
+
+/* Style pour mettre en évidence les arêtes (Trajet) */
+#cy .path {
+    line-color: #ffcc00 !important; /* Jaune vif pour le chemin */
+    width: 5 !important;
+    z-index: 90;
 }
