@@ -1,4 +1,4 @@
-// Fichier : frontend/app.js (Code Final avec Recherche et Trajet Guidé)
+// Fichier : frontend/app.js (Code Complet Final)
 // -------------------------------------------------------------------
 
 let cy = null; 
@@ -7,7 +7,7 @@ let serversVisible = true;
 let serversHiddenLayout; 
 
 // --- CONFIGURATION LOCALE ---
-// Assurez-vous que ces constantes correspondent à votre application Discord
+// ATTENTION : Si ces valeurs ne sont pas correctes, rien ne fonctionnera.
 const CLIENT_ID = '1454871638972694738'; 
 const REDIRECT_URI = 'https://friendtree0.github.io/'; 
 const SCOPE = 'identify guilds'; 
@@ -23,7 +23,7 @@ const makeDraggable = (element) => {
 
     const dragMouseDown = (e) => {
         e = e || window.event;
-        // On permet le drag seulement si on clique sur le panneau de contrôle, et non sur un input/bouton
+        // Permet le drag seulement si on clique sur le panneau de contrôle, pas sur un input/bouton/label
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.tagName === 'LABEL' || e.target.tagName === 'HR') return;
 
         e.preventDefault();
@@ -93,7 +93,7 @@ const afficherDetailsNoeud = (nodeId) => {
     }
 };
 
-// --- NOUVELLE FONCTION : Rechercher un nœud par Nom ou ID ---
+// --- Fonction : Rechercher un nœud par Nom ou ID ---
 const rechercherNoeud = () => {
     if (!cy) return;
     
@@ -102,7 +102,6 @@ const rechercherNoeud = () => {
 
     cy.elements().removeClass('highlighted path');
     
-    // Convertir en minuscule pour la recherche insensible à la casse
     const lowerSearchTerm = searchTerm.toLowerCase();
 
     // Chercher par ID (exact) ou par Nom (contient)
@@ -117,23 +116,22 @@ const rechercherNoeud = () => {
         const node = nodeToFind[0];
         node.addClass('highlighted');
         
-        // Zoom intelligent: cible le nœud et ses connexions, mais ne zoome pas trop près.
         cy.animate({
             fit: { eles: node.union(node.connectedEdges()), padding: 80 }, 
             duration: 400
         });
-        afficherDetailsNoeud(node.id()); // Afficher les détails du nœud trouvé
+        afficherDetailsNoeud(node.id()); 
         document.getElementById('connexion-status').textContent = `Statut : ✅ Nœud "${node.data('label')}" localisé.`;
     } else if (nodeToFind.length > 1) {
         document.getElementById('connexion-status').textContent = `Statut : ⚠️ ${nodeToFind.length} nœuds correspondent. Affinez votre recherche. Mise en évidence des résultats.`;
-        nodeToFind.addClass('highlighted'); // Mettre en évidence tous les matchs
+        nodeToFind.addClass('highlighted'); 
     } else {
         document.getElementById('connexion-status').textContent = `Statut : ❌ Aucun nœud trouvé pour "${searchTerm}".`;
     }
 };
 
 
-// --- NOUVELLE FONCTION : Trouver un Trajet Social Guidé ---
+// --- Fonction : Trouver un Trajet Social Guidé ---
 const trouverTrajetSocial = () => {
     if (!cy) return;
     
@@ -148,7 +146,6 @@ const trouverTrajetSocial = () => {
         return;
     }
 
-    // Fonction utilitaire pour trouver un nœud utilisateur par nom ou ID
     const findUserNode = (searchTerm) => {
         const lowerSearchTerm = searchTerm.toLowerCase();
         return cy.nodes('[type = "utilisateur"]').filter(node => {
@@ -167,9 +164,8 @@ const trouverTrajetSocial = () => {
     const sourceNode = sourceNodes[0];
     const targetNode = targetNodes[0];
     
-    // Utiliser Dijkstra sur les liens 'serveur_commun' (Social Graph)
-    // On doit spécifier les éléments (edges) sur lesquels on veut appliquer Dijkstra
-    const pathFinder = cy.elements('[type = "serveur_commun"]').dijkstra(sourceNode, (edge) => 1, true); // Poids uniforme (1)
+    // Dijkstra sur les liens 'serveur_commun'
+    const pathFinder = cy.elements('[type = "serveur_commun"]').dijkstra(sourceNode, (edge) => 1, true); 
     const pathToTarget = pathFinder.pathTo(targetNode);
 
     if (pathToTarget.length > 0) {
@@ -177,11 +173,9 @@ const trouverTrajetSocial = () => {
         const edgesCount = pathToTarget.edges().length;
         const nodesInPathCount = pathToTarget.nodes().length;
         
-        // Mise en évidence du trajet
         pathToTarget.addClass('path');
         pathToTarget.nodes().addClass('highlighted');
         
-        // Zoom sur le trajet
         cy.animate({
             fit: { eles: pathToTarget, padding: 50 },
             duration: 500
@@ -196,7 +190,7 @@ const trouverTrajetSocial = () => {
 };
 
 
-// --- FONCTION 3 : Masquer/Afficher les serveurs ---
+// --- Fonction : Masquer/Afficher les serveurs ---
 const toggleServers = () => {
     if (!cy) return;
 
@@ -317,13 +311,11 @@ const mettreAJourGraphe = (utilisateurs, relations, serveurs, forceRedraw = fals
         });
         document.getElementById('connexion-status').textContent = `Graphe chargé : ${utilisateurs.length} utilisateurs, ${serveurs.length} serveurs.`;
         
-        // Attacher le tap listener pour afficher les détails
         cy.on('tap', 'node', function(evt){
             const node = evt.target;
             afficherDetailsNoeud(node.id());
         });
         
-        // Attacher le tap listener pour effacer les sélections
         cy.on('tap', function(evt){
             if(evt.target === cy){
                 document.getElementById('details-panel').style.display = 'none';
