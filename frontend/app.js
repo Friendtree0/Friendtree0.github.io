@@ -1,16 +1,13 @@
-// Fichier : frontend/app.js (Code Final avec Nouvelles Fonctionnalités)
+// Fichier : frontend/app.js (Code Final avec Recherche et Trajet Guidé)
 // -------------------------------------------------------------------
 
 let cy = null; 
-let graphData = {
-    utilisateurs: [],
-    relations: [],
-    serveurs: []
-};
-let serversVisible = true; // État pour le bouton Masquer/Afficher les serveurs
-let serversHiddenLayout; // Pour stocker la position des nœuds quand les serveurs sont masqués
+let graphData = { utilisateurs: [], relations: [], serveurs: [] };
+let serversVisible = true;
+let serversHiddenLayout; 
 
 // --- CONFIGURATION LOCALE ---
+// Assurez-vous que ces constantes correspondent à votre application Discord
 const CLIENT_ID = '1454871638972694738'; 
 const REDIRECT_URI = 'https://friendtree0.github.io/'; 
 const SCOPE = 'identify guilds'; 
@@ -19,14 +16,15 @@ const PROXY_API_BASE_URL = 'https://friendtree0-github-io.onrender.com/api';
 // ---------------------------------------------------
 
 
-// --- LOGIQUE DRAG AND DROP POUR LE PANNEAU DE DÉTAILS ---
+// --- LOGIQUE DRAG AND DROP POUR LE PANNEAU DE CONTRÔLE ---
 
 const makeDraggable = (element) => {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 
     const dragMouseDown = (e) => {
         e = e || window.event;
-        if (e.target.tagName === 'CODE' || e.target.tagName === 'STRONG') return;
+        // On permet le drag seulement si on clique sur le panneau de contrôle, et non sur un input/bouton
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.tagName === 'LABEL' || e.target.tagName === 'HR') return;
 
         e.preventDefault();
         pos3 = e.clientX;
@@ -87,14 +85,6 @@ const afficherDetailsNoeud = (nodeId) => {
         htmlContent += `<p style="font-size: 0.85em; color: #bbb;">(Dernière analyse : ${lastExportDate})</p>`;
     }
     
-    // --- AJOUT : Boutons d'Action (Localiser/Trajet) ---
-    if (nodeData.type === 'utilisateur') {
-        htmlContent += `<hr style="border-color:#4f545c; margin: 10px 0;">`;
-        htmlContent += `<button onclick="localiserNoeud('${nodeId}')" style="background-color:#4752c4; color:white; border:none; padding:5px 10px; border-radius:4px; margin-right:5px; cursor:pointer;">Localiser</button>`;
-        htmlContent += `<button onclick="demarrerTrajet('${nodeId}')" style="background-color:#f04747; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">Trajet</button>`;
-    }
-    // ----------------------------------------------------
-
     detailsContainer.innerHTML = htmlContent;
     
     const detailsPanel = document.getElementById('details-panel');
@@ -103,71 +93,105 @@ const afficherDetailsNoeud = (nodeId) => {
     }
 };
 
-
-// --- NOUVELLE FONCTION 1 : Localiser un Utilisateur ---
-const localiserNoeud = (nodeId) => {
+// --- NOUVELLE FONCTION : Rechercher un nœud par Nom ou ID ---
+const rechercherNoeud = () => {
     if (!cy) return;
     
-    cy.elements().removeClass('highlighted'); // Enlever l'ancien focus
-    const node = cy.getElementById(nodeId);
+    const searchTerm = document.getElementById('search-input').value.trim();
+    if (searchTerm === "") return;
+
+    cy.elements().removeClass('highlighted path');
     
-    if (node.length) {
+    // Convertir en minuscule pour la recherche insensible à la casse
+    const lowerSearchTerm = searchTerm.toLowerCase();
+
+    // Chercher par ID (exact) ou par Nom (contient)
+    const nodeToFind = cy.elements().filter(node => {
+        if (!node.isNode()) return false;
+        const idMatch = node.data('id') === searchTerm;
+        const nameMatch = node.data('label') && node.data('label').toLowerCase().includes(lowerSearchTerm);
+        return idMatch || nameMatch;
+    });
+
+    if (nodeToFind.length === 1) {
+        const node = nodeToFind[0];
         node.addClass('highlighted');
+        
+        // Zoom intelligent: cible le nœud et ses connexions, mais ne zoome pas trop près.
         cy.animate({
-            fit: { eles: node, padding: 100 }, // Zoom sur l'utilisateur
-            duration: 500
+            fit: { eles: node.union(node.connectedEdges()), padding: 80 }, 
+            duration: 400
         });
-        document.getElementById('connexion-status').textContent = `Statut : Localisation effectuée sur l'utilisateur ${node.data('label')}.`;
+        afficherDetailsNoeud(node.id()); // Afficher les détails du nœud trouvé
+        document.getElementById('connexion-status').textContent = `Statut : ✅ Nœud "${node.data('label')}" localisé.`;
+    } else if (nodeToFind.length > 1) {
+        document.getElementById('connexion-status').textContent = `Statut : ⚠️ ${nodeToFind.length} nœuds correspondent. Affinez votre recherche. Mise en évidence des résultats.`;
+        nodeToFind.addClass('highlighted'); // Mettre en évidence tous les matchs
+    } else {
+        document.getElementById('connexion-status').textContent = `Statut : ❌ Aucun nœud trouvé pour "${searchTerm}".`;
     }
 };
 
-// --- NOUVELLE FONCTION 2 : Trajet entre Deux Utilisateurs (Chemin le plus court) ---
-let trajetSourceId = null; 
 
-const demarrerTrajet = (sourceId) => {
+// --- NOUVELLE FONCTION : Trouver un Trajet Social Guidé ---
+const trouverTrajetSocial = () => {
     if (!cy) return;
     
-    if (trajetSourceId === sourceId) {
-        // Double-clic, on annule
-        trajetSourceId = null;
-        cy.elements().removeClass('path highlighted');
-        document.getElementById('connexion-status').textContent = "Statut : Sélection du trajet annulée.";
+    const sourceTerm = document.getElementById('trajet-source').value.trim();
+    const targetTerm = document.getElementById('trajet-target').value.trim();
+    const resultElement = document.getElementById('path-result');
+    resultElement.innerHTML = '';
+    cy.elements().removeClass('path highlighted');
+
+    if (!sourceTerm || !targetTerm) {
+        resultElement.innerHTML = `<span style="color:#f04747;">Veuillez entrer les deux utilisateurs (Nom/ID).</span>`;
         return;
     }
 
-    if (trajetSourceId) {
-        // C'est la cible (Target)
-        const targetId = sourceId;
-        
-        // On n'utilise que les liens "serveur_commun" pour trouver un chemin social
-        const users = cy.nodes('[type = "utilisateur"]');
-        const path = users.dijkstra(cy.getElementById(trajetSourceId), (edge) => edge.data('type') === 'serveur_commun' ? 1 : 0, true);
-        
-        const pathToTarget = path.pathTo(cy.getElementById(targetId));
+    // Fonction utilitaire pour trouver un nœud utilisateur par nom ou ID
+    const findUserNode = (searchTerm) => {
+        const lowerSearchTerm = searchTerm.toLowerCase();
+        return cy.nodes('[type = "utilisateur"]').filter(node => {
+            return node.data('id') === searchTerm || (node.data('label') && node.data('label').toLowerCase().includes(lowerSearchTerm));
+        });
+    };
 
-        if (pathToTarget.length) {
-            cy.elements().removeClass('path highlighted'); 
-            pathToTarget.addClass('path');
-            pathToTarget.nodes().addClass('highlighted');
-            
-            cy.animate({
-                fit: { eles: pathToTarget, padding: 100 },
-                duration: 500
-            });
-            document.getElementById('connexion-status').textContent = `✅ Trajet trouvé entre ${cy.getElementById(trajetSourceId).data('label')} et ${cy.getElementById(targetId).data('label')} (via ${pathToTarget.edges().length} liens).`;
-        } else {
-            cy.elements().removeClass('path highlighted'); 
-            document.getElementById('connexion-status').textContent = `❌ Aucun lien social direct (serveur_commun) trouvé entre ces deux utilisateurs.`;
-        }
+    const sourceNodes = findUserNode(sourceTerm);
+    const targetNodes = findUserNode(targetTerm);
+
+    if (sourceNodes.length !== 1 || targetNodes.length !== 1) {
+        resultElement.innerHTML = `<span style="color:#f04747;">Erreur : Vérifiez les noms/ID. Source: ${sourceNodes.length} trouvée(s), Cible: ${targetNodes.length} trouvée(s). (Doit être 1:1)</span>`;
+        return;
+    }
+
+    const sourceNode = sourceNodes[0];
+    const targetNode = targetNodes[0];
+    
+    // Utiliser Dijkstra sur les liens 'serveur_commun' (Social Graph)
+    // On doit spécifier les éléments (edges) sur lesquels on veut appliquer Dijkstra
+    const pathFinder = cy.elements('[type = "serveur_commun"]').dijkstra(sourceNode, (edge) => 1, true); // Poids uniforme (1)
+    const pathToTarget = pathFinder.pathTo(targetNode);
+
+    if (pathToTarget.length > 0) {
         
-        trajetSourceId = null; // Réinitialiser le mode trajet
+        const edgesCount = pathToTarget.edges().length;
+        const nodesInPathCount = pathToTarget.nodes().length;
+        
+        // Mise en évidence du trajet
+        pathToTarget.addClass('path');
+        pathToTarget.nodes().addClass('highlighted');
+        
+        // Zoom sur le trajet
+        cy.animate({
+            fit: { eles: pathToTarget, padding: 50 },
+            duration: 500
+        });
+
+        const resultText = `✅ Trajet trouvé : ${sourceNode.data('label')} -> ${targetNode.data('label')}.<br>Distance sociale (liens directs) : <strong>${edgesCount}</strong>.<br>Nombre d'utilisateurs sur le chemin : <strong>${nodesInPathCount}</strong>.`;
+        resultElement.innerHTML = `<span style="color:#43b581;">${resultText}</span>`;
         
     } else {
-        // C'est la source (Source)
-        cy.elements().removeClass('path highlighted');
-        cy.getElementById(sourceId).addClass('highlighted');
-        trajetSourceId = sourceId;
-        document.getElementById('connexion-status').textContent = `Statut : Premier utilisateur sélectionné. Cliquez sur un second utilisateur pour trouver le trajet social.`;
+        resultElement.innerHTML = `<span style="color:#f04747;">❌ Aucun lien social (serveur commun) trouvé entre ces deux utilisateurs.</span>`;
     }
 };
 
@@ -181,14 +205,10 @@ const toggleServers = () => {
     const button = document.getElementById('btn-toggle-servers');
 
     if (serversVisible) {
-        // Stocker la position actuelle du graphe des utilisateurs (si l'utilisateur l'a déplacé)
         serversHiddenLayout = cy.json();
-
-        // Cacher les serveurs et les liens de membre
         servers.hide();
         linksToServers.hide();
         
-        // Exécuter un nouveau layout sur les nœuds visibles (utilisateurs et liens serveur_commun)
         const newLayout = cy.layout({
             name: 'concentric', 
             fit: true, 
@@ -196,7 +216,6 @@ const toggleServers = () => {
             animate: true, 
             animationDuration: 800,
             ready: function() {
-                // Stocker la position de ce layout compact
                 serversHiddenLayout = cy.json();
             }
         });
@@ -206,14 +225,12 @@ const toggleServers = () => {
         button.textContent = "Afficher les Serveurs";
         document.getElementById('connexion-status').textContent = "Statut : Les nœuds de serveurs sont masqués.";
     } else {
-        // Afficher les serveurs et les liens de membre
         servers.show();
         linksToServers.show();
 
-        // Restaurer la position stockée (si disponible) ou relancer le layout complet
         if (serversHiddenLayout) {
-             cy.json(serversHiddenLayout); // Restaure les positions
-             cy.layout({ name: 'concentric', fit: true, padding: 30 }).run(); // Un layout doux pour le retour
+             cy.json(serversHiddenLayout);
+             cy.layout({ name: 'concentric', fit: true, padding: 30 }).run();
         } else {
              cy.layout({ name: 'concentric', fit: true, padding: 30 }).run();
         }
@@ -225,14 +242,13 @@ const toggleServers = () => {
 };
 
 
-// --- Fonctions Cytoscape ---
+// --- Fonctions de construction de graphe ---
 
 const preparerElementsGraphe = (utilisateurs, relations, serveurs) => {
-    // ... (Logique inchangée)
     const elements = [];
     
     utilisateurs.forEach(u => {
-        elements.push({ data: { id: u.id, label: u.nom, color: u.couleur || '#ccc', type: u.type }, group: 'nodes' });
+        elements.push({ data: { id: u.id, label: u.nom, color: u.couleur || '#ccc', type: u.type, dateExport: u.dateExport }, group: 'nodes' });
     });
     
     serveurs.forEach(s => {
@@ -258,7 +274,7 @@ const mettreAJourGraphe = (utilisateurs, relations, serveurs, forceRedraw = fals
             'text-valign': 'center', 'text-halign': 'right', 'font-size': '12px', 
             'text-shadow-blur': 0,
             'width': '60px', 'height': '60px',
-            'border-width': 0, // Style par défaut pour le border
+            'border-width': 0, 
         }},
         { selector: 'node[type = "serveur"]', style: {
             'shape': 'round-rectangle', 'width': '80px', 'height': '30px', 'text-halign': 'center', 'text-valign': 'top',
@@ -268,14 +284,14 @@ const mettreAJourGraphe = (utilisateurs, relations, serveurs, forceRedraw = fals
             'border-width': 3, 'border-color': '#fff', 'border-opacity': 0.7,
             'text-outline-color': '#000', 'text-outline-width': 2,
         }},
-        // --- NOUVEAUX STYLES POUR LOCALISATION ET TRAJET ---
+        // Styles pour Localisation et Trajet
         { selector: 'node.highlighted', style: {
             'border-width': 5,
-            'border-color': '#ffcc00', /* Jaune vif pour le focus */
+            'border-color': '#ffcc00', 
             'z-index': 100,
         }},
         { selector: 'edge.path', style: {
-            'line-color': '#ffcc00', /* Jaune vif pour le chemin */
+            'line-color': '#ffcc00', 
             'width': 5,
             'z-index': 90,
         }},
@@ -297,22 +313,22 @@ const mettreAJourGraphe = (utilisateurs, relations, serveurs, forceRedraw = fals
     try {
          cy = cytoscape({
             container: cyContainer, elements: elements, style: style,
-            // layout: (utilisateurs.length > 50 ? { name: 'cola', fit: true, padding: 30 } : { name: 'concentric', fit: true, padding: 30, animate: true, animationDuration: 500 })
-             layout: { name: 'concentric', fit: true, padding: 30, animate: true, animationDuration: 500 }
+            layout: { name: 'concentric', fit: true, padding: 30, animate: true, animationDuration: 500 }
         });
         document.getElementById('connexion-status').textContent = `Graphe chargé : ${utilisateurs.length} utilisateurs, ${serveurs.length} serveurs.`;
         
+        // Attacher le tap listener pour afficher les détails
         cy.on('tap', 'node', function(evt){
             const node = evt.target;
             afficherDetailsNoeud(node.id());
         });
         
+        // Attacher le tap listener pour effacer les sélections
         cy.on('tap', function(evt){
             if(evt.target === cy){
-                document.getElementById('details-content').innerHTML = `Cliquez sur un utilisateur sur le graphe pour voir les détails ici.`;
                 document.getElementById('details-panel').style.display = 'none';
-                cy.elements().removeClass('path highlighted'); // Enlever la sélection/trajet
-                trajetSourceId = null; 
+                cy.elements().removeClass('path highlighted');
+                document.getElementById('path-result').innerHTML = ''; // Effacer le résultat de trajet
             }
         });
         
@@ -326,7 +342,6 @@ const mettreAJourGraphe = (utilisateurs, relations, serveurs, forceRedraw = fals
 };
 
 const detecterRelationsCommunes = () => {
-    // ... (Logique inchangée)
     const userGuilds = new Map();
     
     graphData.utilisateurs.forEach(user => {
@@ -372,7 +387,6 @@ const detecterRelationsCommunes = () => {
 
 
 const fusionnerEtAnalyserDonnees = (allStoredData) => {
-    // ... (Logique inchangée)
     const userMap = new Map();
     const serverMap = new Map();
     const relationsSet = new Set();
@@ -411,7 +425,6 @@ const connecterDiscord = () => {
 };
 
 const analyserDonneesDiscord = (data) => { 
-    // ... (Logique inchangée)
     const userData = data.userData;
     const guildsData = data.guildsData || []; 
     
@@ -423,7 +436,6 @@ const analyserDonneesDiscord = (data) => {
     document.getElementById('connexion-status').textContent = `Statut : Connecté en tant que ${userData.global_name || userData.username}. ${guildsData.length} serveurs récupérés.`;
 };
 
-// --- FONCTION 4 : Recharger la carte depuis la DB (pour le nouveau bouton) ---
 const rechargerCarte = () => {
     importerDonneesStockees(false);
 };
@@ -460,7 +472,6 @@ const importerDonneesStockees = async (afterCodeGrant = false) => {
 };
 
 const echangerCodeContreInfos = async (code) => {
-    // ... (Logique inchangée)
     const callbackUrl = `${PROXY_API_BASE_URL}/auth/callback?code=${code}`; 
 
     try {
@@ -485,7 +496,6 @@ const echangerCodeContreInfos = async (code) => {
 };
 
 const gererRedirectionOAuth = () => {
-    // ... (Logique inchangée)
     const detailsPanel = document.getElementById('details-panel');
     if(detailsPanel) { detailsPanel.style.display = 'none'; }
 
@@ -518,18 +528,24 @@ const reinitialiserGraphe = () => {
         mettreAJourGraphe([], [], [], true); 
         document.getElementById('details-content').innerHTML = `Graphe local réinitialisé.`;
         document.getElementById('details-panel').style.display = 'none';
+        document.getElementById('path-result').innerHTML = '';
     }
 };
 
 
 // --- INITIALISATION DES ÉVÉNEMENTS ---
 document.addEventListener('DOMContentLoaded', () => {
-    const detailsPanel = document.getElementById('details-panel');
-    if(detailsPanel) {
-        makeDraggable(detailsPanel);
+    
+    const controlPanel = document.getElementById('control-panel');
+    if(controlPanel) {
+        makeDraggable(controlPanel); // Rendre le panneau de contrôle draggable
     }
     
-    // Ajout des nouveaux écouteurs d'événements
+    // Attacher les nouvelles fonctions de recherche et trajet
+    document.getElementById('btn-search-node').addEventListener('click', rechercherNoeud);
+    document.getElementById('btn-find-path').addEventListener('click', trouverTrajetSocial);
+    
+    // Attacher les fonctions de base
     document.getElementById('btn-reset').addEventListener('click', reinitialiserGraphe);
     document.getElementById('btn-discord-connect').addEventListener('click', connecterDiscord);
     document.getElementById('btn-reload-map').addEventListener('click', rechargerCarte); 
