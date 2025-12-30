@@ -1,3 +1,4 @@
+// Fichier : backend-proxy/package.json
 {
   "name": "discord-social-graph-proxy",
   "version": "1.0.0",
@@ -9,6 +10,7 @@
   "dependencies": {
     "express": "^4.18.2",
     "node-fetch": "^2.6.7",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "mongodb": "^6.3.0"  <-- NOUVEAU
   }
 }
