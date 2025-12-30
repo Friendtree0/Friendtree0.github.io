@@ -72,6 +72,7 @@ header h1 {
     background-color: #36393f;
     min-width: 50%;
     height: 100%;
+    transition: opacity 0.3s; /* Pour l'effet de flou lors du chargement */
 }
 
 /* --- PANNEAU DE CONTRÔLE FLOTTANT (DRAGGABLE) --- */
@@ -202,31 +203,6 @@ header h1 {
     color: #ffffff; 
 }
 
-#info-container {
-    background-color: #2c2f33;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    max-width: 800px;
-    margin: 30px auto;
-}
-
-#info-container h2, #info-container h3 {
-    color: #7289da; 
-    border-bottom: 1px solid #4f545c;
-    padding-bottom: 5px;
-    margin-top: 20px;
-}
-
-#info-container p, #info-container li {
-    color: #ffffff;
-    line-height: 1.6;
-}
-
-#info-container ul, #info-container ol {
-    padding-left: 20px;
-}
-
 /* --- CYTOSCAPE STYLES (Focus et Trajet) --- */
 
 /* Style pour mettre en évidence un nœud (Localiser et Trajet) */
@@ -241,4 +217,95 @@ header h1 {
     line-color: #ffcc00 !important; /* Jaune vif pour le chemin */
     width: 5 !important;
     z-index: 90;
+}
+
+/* --- STYLE VISUEL (LOADER) --- */
+#loader-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(30, 32, 36, 0.9); /* Fond légèrement transparent */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Assurez-vous qu'il est au-dessus du graphe */
+    color: #b9bbbe;
+    font-size: 1.1em;
+}
+
+/* Spinner CSS (animation simple) */
+.spinner {
+    border: 8px solid #4f545c;
+    border-top: 8px solid #7289da; /* Bleu Discord */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* --- STYLE MODAL (POPUP) --- */
+.modal {
+    position: fixed;
+    z-index: 2000; /* Au-dessus de tout */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7); 
+    display: none; /* Caché par défaut via JS */
+}
+
+.modal-content {
+    background-color: #2f3136;
+    margin: 10% auto; /* Centrage vertical et horizontal */
+    padding: 25px;
+    border: 1px solid #202225;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    animation: modalopen 0.4s;
+}
+
+@keyframes modalopen {
+    from {opacity: 0; transform: translateY(-50px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+.modal-content h2 {
+    color: #7289da;
+    border-bottom: 1px solid #4f545c;
+    padding-bottom: 10px;
+}
+
+.modal-content ul {
+    list-style-type: disc;
+    padding-left: 25px;
+    color: #d1d2d3;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
 }
