@@ -3,7 +3,8 @@
 
 let cy = null; 
 let graphData = { utilisateurs: [], relations: [], serveurs: [] };
-let serversVisible = true;
+// CHANGEMENT : Les serveurs sont cachés par défaut pour la clarté du réseau social
+let serversVisible = false; 
 let serversHiddenLayout; 
 
 // --- CONFIGURATION LOCALE ---
@@ -21,7 +22,6 @@ const PROXY_API_BASE_URL = 'https://friendtree0-github-io.onrender.com/api';
 const showLoader = (message = "Analyse des données sociales...") => {
     document.getElementById('loader-overlay').style.display = 'flex';
     document.querySelector('#loader-overlay p').textContent = message;
-    // Cache le graphe pendant le chargement (en floutant légèrement le conteneur cy)
     const cyElement = document.getElementById('cy');
     if (cyElement) cyElement.style.opacity = 0.5;
 };
@@ -40,7 +40,6 @@ const makeDraggable = (element) => {
 
     const dragMouseDown = (e) => {
         e = e || window.event;
-        // Permet le drag seulement si on clique sur le panneau de contrôle, pas sur un input/bouton/label
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.tagName === 'LABEL' || e.target.tagName === 'HR') return;
 
         e.preventDefault();
@@ -225,6 +224,7 @@ const toggleServers = () => {
             padding: 50, 
             animate: true, 
             animationDuration: 800,
+            minNodeSpacing: 50, // Répulsion modérée
             ready: function() {
                 serversHiddenLayout = cy.json();
             }
@@ -323,10 +323,38 @@ const mettreAJourGraphe = (utilisateurs, relations, serveurs, forceRedraw = fals
     try {
          cy = cytoscape({
             container: cyContainer, elements: elements, style: style,
+            // Layout initial rapide
             layout: { name: 'concentric', fit: true, padding: 30, animate: true, animationDuration: 500 }
         });
         document.getElementById('connexion-status').textContent = `Graphe chargé : ${utilisateurs.length} utilisateurs, ${serveurs.length} serveurs.`;
         
+        // ------------------------------------------------------------------
+        // NOUVEAU : Masquer les serveurs au chargement initial 
+        const servers = cy.nodes('[type = "serveur"]');
+        const linksToServers = cy.edges('[type = "membre_de"]');
+
+        if (servers.length > 0) {
+            serversHiddenLayout = cy.json(); // Sauvegarde l'état initial complet
+            servers.hide();
+            linksToServers.hide();
+            
+            // Relance un layout pour compacter les utilisateurs restants
+            cy.layout({ 
+                name: 'concentric', 
+                fit: true, 
+                padding: 50,
+                animate: true,
+                animationDuration: 500,
+                minNodeSpacing: 50, // Ajustement de la répulsion modérée
+            }).run(); 
+            
+            serversVisible = false;
+            document.getElementById('connexion-status').textContent += " (Serveurs masqués par défaut.)";
+        } else {
+             serversVisible = true;
+        }
+        // ------------------------------------------------------------------
+
         cy.on('tap', 'node', function(evt){
             const node = evt.target;
             afficherDetailsNoeud(node.id());
@@ -336,12 +364,11 @@ const mettreAJourGraphe = (utilisateurs, relations, serveurs, forceRedraw = fals
             if(evt.target === cy){
                 document.getElementById('details-panel').style.display = 'none';
                 cy.elements().removeClass('path highlighted');
-                document.getElementById('path-result').innerHTML = ''; // Effacer le résultat de trajet
+                document.getElementById('path-result').innerHTML = ''; 
             }
         });
         
-        serversVisible = true;
-        document.getElementById('btn-toggle-servers').textContent = "Masquer les Serveurs";
+        // La gestion du bouton se fait par le code ci-dessus, le texte est mis à jour dans index.html
 
     } catch (e) { 
         console.error("Erreur lors de l'initialisation de Cytoscape:", e); 
@@ -430,7 +457,6 @@ const connecterDiscord = () => {
     document.getElementById('discord-modal').style.display = 'block';
 };
 
-// Fonction appelée quand l'utilisateur clique sur "Continuer vers Discord" dans la modale
 const executeDiscordConnect = () => {
     document.getElementById('discord-modal').style.display = 'none';
     showLoader("Redirection vers Discord...");
@@ -561,28 +587,24 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const controlPanel = document.getElementById('control-panel');
     if(controlPanel) {
-        makeDraggable(controlPanel); // Rendre le panneau de contrôle draggable
+        makeDraggable(controlPanel); 
     }
     
-    // Attacher les nouvelles fonctions de recherche et trajet
     document.getElementById('btn-search-node').addEventListener('click', rechercherNoeud);
     document.getElementById('btn-find-path').addEventListener('click', trouverTrajetSocial);
     
     
-    // NOUVEAU: Logique de la modale Discord
+    // Logique de la modale Discord
     const discordModal = document.getElementById('discord-modal');
     const btnModalContinue = document.getElementById('btn-modal-continue');
     const closeButton = document.querySelector('.close-button');
 
-    // 1. Bouton "Continuer" dans la modale déclenche la redirection
     btnModalContinue.addEventListener('click', executeDiscordConnect);
 
-    // 2. Fermeture de la modale par le bouton X
     closeButton.addEventListener('click', () => {
         discordModal.style.display = 'none';
     });
 
-    // 3. Fermeture si l'utilisateur clique en dehors de la modale
     window.addEventListener('click', (event) => {
         if (event.target === discordModal) {
             discordModal.style.display = 'none';
@@ -592,7 +614,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Attacher les fonctions de base
     document.getElementById('btn-reset').addEventListener('click', reinitialiserGraphe);
-    document.getElementById('btn-discord-connect').addEventListener('click', connecterDiscord); // Appelle maintenant la modale
+    document.getElementById('btn-discord-connect').addEventListener('click', connecterDiscord); 
     document.getElementById('btn-reload-map').addEventListener('click', rechargerCarte); 
     document.getElementById('btn-toggle-servers').addEventListener('click', toggleServers);
 
