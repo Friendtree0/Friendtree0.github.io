@@ -262,7 +262,7 @@ header h1 {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.7); 
-    display: none; /* Caché par défaut via JS */
+    /* display: none; est géré par JS et par le style inline dans le HTML */
 }
 
 .modal-content {
