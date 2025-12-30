@@ -1,0 +1,14 @@
+{
+  "name": "discord-api-proxy",
+  "version": "1.0.0",
+  "description": "Simple proxy to bypass Discord CORS issues.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.22.1",
+    "node-fetch": "^2.7.0"
+  }
+}
