@@ -16,6 +16,23 @@ const PROXY_API_BASE_URL = 'https://friendtree0-github-io.onrender.com/api';
 // ---------------------------------------------------
 
 
+// --- FONCTIONS UTILITIES VISUELLES (LOADER) ---
+
+const showLoader = (message = "Analyse des données sociales...") => {
+    document.getElementById('loader-overlay').style.display = 'flex';
+    document.querySelector('#loader-overlay p').textContent = message;
+    // Cache le graphe pendant le chargement (en floutant légèrement le conteneur cy)
+    const cyElement = document.getElementById('cy');
+    if (cyElement) cyElement.style.opacity = 0.5;
+};
+
+const hideLoader = () => {
+    document.getElementById('loader-overlay').style.display = 'none';
+    const cyElement = document.getElementById('cy');
+    if (cyElement) cyElement.style.opacity = 1;
+};
+
+
 // --- LOGIQUE DRAG AND DROP POUR LE PANNEAU DE CONTRÔLE ---
 
 const makeDraggable = (element) => {
@@ -409,11 +426,20 @@ const fusionnerEtAnalyserDonnees = (allStoredData) => {
 // --- LOGIQUE DISCORD / IMPORT ---
 
 const connecterDiscord = () => {
-    document.getElementById('connexion-status').textContent = "Statut : Connexion à Discord (demande de code)...";
+    // Affiche la modale au lieu de rediriger directement
+    document.getElementById('discord-modal').style.display = 'block';
+};
+
+// Fonction appelée quand l'utilisateur clique sur "Continuer vers Discord" dans la modale
+const executeDiscordConnect = () => {
+    document.getElementById('discord-modal').style.display = 'none';
+    showLoader("Redirection vers Discord...");
+    
     const encodedScope = encodeURIComponent(SCOPE); 
     const authUrl = `${DISCORD_API_URL}/oauth2/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${REDIRECT_URI}&scope=${encodedScope}`;
     window.location.href = authUrl;
 };
+
 
 const analyserDonneesDiscord = (data) => { 
     const userData = data.userData;
@@ -432,6 +458,7 @@ const rechargerCarte = () => {
 };
 
 const importerDonneesStockees = async (afterCodeGrant = false) => {
+    showLoader("Chargement et fusion de toutes les cartes sauvegardées...");
     document.getElementById('connexion-status').textContent = "Statut : Chargement et fusion de toutes les cartes sauvegardées (via MongoDB)...";
     const importUrl = `${PROXY_API_BASE_URL}/data/import`; 
     
@@ -442,7 +469,6 @@ const importerDonneesStockees = async (afterCodeGrant = false) => {
         if (response.ok && Array.isArray(allStoredData)) {
             
             fusionnerEtAnalyserDonnees(allStoredData);
-            
             mettreAJourGraphe(graphData.utilisateurs, graphData.relations, graphData.serveurs, true);
 
             if (afterCodeGrant) {
@@ -450,19 +476,23 @@ const importerDonneesStockees = async (afterCodeGrant = false) => {
             } else {
                  document.getElementById('connexion-status').textContent = `Statut : ${graphData.utilisateurs.length} utilisateurs chargés depuis la sauvegarde.`;
             }
-
+            
+            hideLoader(); 
         } else {
             console.error("❌ Échec de la récupération des cartes stockées.", allStoredData);
             document.getElementById('connexion-status').textContent = "Statut : Erreur lors de l'importation des cartes stockées (API Down ?).";
+            hideLoader(); 
         }
 
     } catch (error) {
         console.error("❌ Erreur de connexion au Proxy Cloud. L'API est-elle déployée et l'URL est-elle correcte ?", error);
         document.getElementById('connexion-status').textContent = "Statut : Échec - API Proxy Cloud non trouvé.";
+        hideLoader(); 
     }
 };
 
 const echangerCodeContreInfos = async (code) => {
+    showLoader("Échange du code Discord...");
     const callbackUrl = `${PROXY_API_BASE_URL}/auth/callback?code=${code}`; 
 
     try {
@@ -478,11 +508,13 @@ const echangerCodeContreInfos = async (code) => {
         } else {
             console.error(`❌ Échec de l'appel Proxy Code Grant.`, data);
             document.getElementById('connexion-status').textContent = `Statut : Échec Code Grant (${data.error || 'Erreur inconnue'}).`;
+            hideLoader();
         }
 
     } catch (error) {
         console.error("❌ Erreur de connexion au Proxy Cloud.", error);
         document.getElementById('connexion-status').textContent = "Statut : Échec - API Proxy Cloud non trouvé.";
+        hideLoader();
     }
 };
 
@@ -536,12 +568,34 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-search-node').addEventListener('click', rechercherNoeud);
     document.getElementById('btn-find-path').addEventListener('click', trouverTrajetSocial);
     
+    
+    // NOUVEAU: Logique de la modale Discord
+    const discordModal = document.getElementById('discord-modal');
+    const btnModalContinue = document.getElementById('btn-modal-continue');
+    const closeButton = document.querySelector('.close-button');
+
+    // 1. Bouton "Continuer" dans la modale déclenche la redirection
+    btnModalContinue.addEventListener('click', executeDiscordConnect);
+
+    // 2. Fermeture de la modale par le bouton X
+    closeButton.addEventListener('click', () => {
+        discordModal.style.display = 'none';
+    });
+
+    // 3. Fermeture si l'utilisateur clique en dehors de la modale
+    window.addEventListener('click', (event) => {
+        if (event.target === discordModal) {
+            discordModal.style.display = 'none';
+        }
+    });
+
+
     // Attacher les fonctions de base
     document.getElementById('btn-reset').addEventListener('click', reinitialiserGraphe);
-    document.getElementById('btn-discord-connect').addEventListener('click', connecterDiscord);
+    document.getElementById('btn-discord-connect').addEventListener('click', connecterDiscord); // Appelle maintenant la modale
     document.getElementById('btn-reload-map').addEventListener('click', rechargerCarte); 
     document.getElementById('btn-toggle-servers').addEventListener('click', toggleServers);
 
-    // Démarrer la gestion de la redirection
+    // Démarrer la gestion de la redirection et le chargement initial des données
     gererRedirectionOAuth();
 });
