@@ -1,4 +1,4 @@
-// Fichier : app.js (CODE FINAL AVEC DRAGGABLE ET LAYOUT CONCENTRIC STABLE)
+// Fichier : frontend/app.js (Code Final avec URL RENDER)
 // -------------------------------------------------------------------
 
 let cy = null; 
@@ -14,7 +14,8 @@ const CLIENT_ID = '1454871638972694738';
 const REDIRECT_URI = 'https://friendtree0.github.io/'; 
 const SCOPE = 'identify guilds'; 
 const DISCORD_API_URL = 'https://discord.com/api/v10';
-const PROXY_API_BASE_URL = 'http://127.0.0.1:3000/api'; 
+// URL publique de votre serveur Proxy Render
+const PROXY_API_BASE_URL = 'https://friendtree0-github-io.onrender.com/api'; 
 // ---------------------------------------------------
 
 // --- LOGIQUE DRAG AND DROP POUR LE PANNEAU DE DÉTAILS ---
@@ -24,16 +25,13 @@ const makeDraggable = (element) => {
 
     const dragMouseDown = (e) => {
         e = e || window.event;
-        // Permettre le glissement seulement si le clic n'est pas sur un champ de texte ou un lien interne
         if (e.target.tagName === 'CODE' || e.target.tagName === 'STRONG') return;
 
         e.preventDefault();
 
-        // Position de la souris au moment du clic
         pos3 = e.clientX;
         pos4 = e.clientY;
         
-        // Attacher les gestionnaires d'événements pour le mouvement et le relâchement
         document.onmouseup = closeDragElement;
         document.onmousemove = elementDrag;
     };
@@ -42,28 +40,23 @@ const makeDraggable = (element) => {
         e = e || window.event;
         e.preventDefault();
 
-        // Calcul de la nouvelle position du curseur (différence)
         pos1 = pos3 - e.clientX;
         pos2 = pos4 - e.clientY;
         pos3 = e.clientX;
         pos4 = e.clientY;
 
-        // Définir la nouvelle position de l'élément
         let newTop = element.offsetTop - pos2;
         let newLeft = element.offsetLeft - pos1;
         
-        // Appliquer les nouvelles positions (sans vérification des limites pour la simplicité)
         element.style.top = newTop + "px";
         element.style.left = newLeft + "px";
     };
 
     const closeDragElement = () => {
-        // Stopper le déplacement
         document.onmouseup = null;
         document.onmousemove = null;
     };
 
-    // Initialiser le déplacement au clic sur le panneau
     element.onmousedown = dragMouseDown;
 };
 
@@ -96,7 +89,6 @@ const afficherDetailsNoeud = (nodeId) => {
     
     detailsContainer.innerHTML = htmlContent;
     
-    // Afficher le panneau s'il était caché
     const detailsPanel = document.getElementById('details-panel');
     if(detailsPanel) {
         detailsPanel.style.display = 'block'; 
@@ -162,7 +154,6 @@ const mettreAJourGraphe = (utilisateurs, relations, serveurs, forceRedraw = fals
     try {
          cy = cytoscape({
             container: cyContainer, elements: elements, style: style,
-            // LAYOUT STABLE UTILISÉ
             layout: { name: 'concentric', fit: true, padding: 30, animate: true, animationDuration: 500 }
         });
         document.getElementById('connexion-status').textContent = `Graphe chargé : ${utilisateurs.length} utilisateurs, ${serveurs.length} serveurs.`;
@@ -175,7 +166,7 @@ const mettreAJourGraphe = (utilisateurs, relations, serveurs, forceRedraw = fals
         cy.on('tap', function(evt){
             if(evt.target === cy){
                 document.getElementById('details-content').innerHTML = `Cliquez sur un utilisateur sur le graphe pour voir les détails ici.`;
-                document.getElementById('details-panel').style.display = 'none'; // Cacher le panneau si on clique dans le vide
+                document.getElementById('details-panel').style.display = 'none';
             }
         });
         
@@ -306,8 +297,8 @@ const importerDonneesStockees = async (afterCodeGrant = false) => {
         }
 
     } catch (error) {
-        console.error("❌ Erreur de connexion au Proxy. Le Back-End est-il démarré sur le port 3000 ?", error);
-        document.getElementById('connexion-status').textContent = "Statut : Échec - Proxy Back-End non trouvé (Port 3000 ?).";
+        console.error("❌ Erreur de connexion au Proxy Cloud. L'API est-elle déployée et l'URL est-elle correcte ?", error);
+        document.getElementById('connexion-status').textContent = "Statut : Échec - API Proxy Cloud non trouvé.";
     }
 };
 
@@ -330,14 +321,14 @@ const echangerCodeContreInfos = async (code) => {
         }
 
     } catch (error) {
-        console.error("❌ Erreur de connexion au Proxy.", error);
-        document.getElementById('connexion-status').textContent = "Statut : Échec - Proxy Back-End non trouvé.";
+        console.error("❌ Erreur de connexion au Proxy Cloud.", error);
+        document.getElementById('connexion-status').textContent = "Statut : Échec - API Proxy Cloud non trouvé.";
     }
 };
 
 const gererRedirectionOAuth = () => {
     const detailsPanel = document.getElementById('details-panel');
-    if(detailsPanel) { detailsPanel.style.display = 'none'; } // Cacher au chargement
+    if(detailsPanel) { detailsPanel.style.display = 'none'; }
 
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code'); 
@@ -382,6 +373,5 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-reset').addEventListener('click', reinitialiserGraphe);
     document.getElementById('btn-discord-connect').addEventListener('click', connecterDiscord);
     
-    // Initialise le traitement de la redirection ou le chargement des données stockées
     gererRedirectionOAuth();
 });
