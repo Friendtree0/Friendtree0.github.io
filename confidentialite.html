@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confidentialité - Discord Social Graph</title>
+    <link rel="stylesheet" href="frontend/style.css">
+</head>
+<body>
+    <header>
+        <h1>Discord Social Graph</h1>
+        <div id="controls">
+            </div>
+    </header>
+
+    <nav class="main-nav">
+        <a href="index.html">Carte</a> |
+        <a href="confidentialite.html">Confidentialité</a> |
+        <a href="tutoriel.html">Tutoriel</a>
+    </nav>
+
+    <div id="info-container" style="max-width: 800px; margin: 30px auto; padding: 0 20px;">
+        <h2>Que faisons-nous de vos données Discord ?</h2>
+        
+        <p>Cette application est conçue pour être **transparente** sur les données collectées et stockées. Elle nécessite votre autorisation pour lire certaines informations de base sur votre compte Discord.</p>
+
+        <h3>1. Les Données que nous Collectons (Scope)</h3>
+        <p>Lors de la connexion, nous demandons l'accès aux informations suivantes :</p>
+        <ul>
+            <li><strong>`identify` :</strong> Votre nom d'utilisateur, votre ID utilisateur (unique), votre avatar.</li>
+            <li><strong>`guilds` :</strong> La liste des serveurs Discord dont vous êtes membre.</li>
+        </ul>
+
+        <h3>2. Les Données que nous Stockons (Base de Données)</h3>
+        <p>Afin de construire le graphe social persistant, nous stockons de manière sécurisée dans notre base de données MongoDB :</p>
+        <ul>
+            <li>Votre **ID utilisateur** (clé unique de la carte).</li>
+            <li>Votre **nom d'utilisateur** et une couleur/type pour l'affichage.</li>
+            <li>Les **IDs et noms des serveurs** que vous partagez.</li>
+            <li>Les **relations** entre vous et ces serveurs.</li>
+        </ul>
+
+        <h3>3. Les Données que nous NE collectons PAS</h3>
+        <p>Nous n'avons **PAS** accès aux informations suivantes et nous ne les stockons jamais :</p>
+        <ul>
+            <li>Vos messages privés ou messages de serveurs.</li>
+            <li>Votre adresse e-mail ou mot de passe Discord.</li>
+            <li>Votre jeton d'accès (il est utilisé une seule fois par notre proxy Render, puis jeté).</li>
+        </ul>
+        
+        <p><strong>But :</strong> Les données sont uniquement utilisées pour visualiser votre réseau social Discord et les points communs avec d'autres utilisateurs qui se connectent à l'application. Elles ne sont pas partagées ou vendues à des tiers.</p>
+
+        <h3>4. Demande de Suppression</h3>
+        <p>Si vous souhaitez que vos données soient définitivement retirées de notre base de données MongoDB, veuillez contacter l'administrateur du projet via [Ajouter une adresse e-mail ou un contact Discord ici].</p>
+    </div>
+    
+</body>
+</html>
