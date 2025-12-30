@@ -1,14 +1,14 @@
 {
-  "name": "discord-api-proxy",
+  "name": "discord-social-graph-proxy",
   "version": "1.0.0",
-  "description": "Simple proxy to bypass Discord CORS issues.",
+  "description": "Proxy pour gérer l'authentification Discord OAuth2 et le stockage des données.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js" 
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.22.1",
-    "node-fetch": "^2.7.0"
+    "express": "^4.18.2",
+    "node-fetch": "^2.6.7",
+    "cors": "^2.8.5"
   }
 }
