@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Discord Social Graph</title>
-    
     <link rel="stylesheet" href="frontend/style.css"> 
-    
     <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
 </head>
 <body>
@@ -18,11 +16,15 @@
         </div>
     </header>
 
+    <nav class="main-nav">
+        <a href="index.html">Carte</a> |
+        <a href="confidentialite.html">Confidentialité</a> |
+        <a href="tutoriel.html">Tutoriel</a> 
+    </nav>
     <div id="connexion-status">Statut : Chargement initial...</div>
 
     <div id="main-container">
         <div id="cy"></div>
-
         <div id="details-panel" class="draggable-panel" style="display:none;">
             <h2>Détails du Nœud</h2>
             <div id="details-content">
