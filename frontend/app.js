@@ -1,9 +1,9 @@
-// Fichier : frontend/app.js (Code Complet Final)
+// Fichier : frontend/app.js (Code Complet Final et Optimisé pour la densité)
 // -------------------------------------------------------------------
 
 let cy = null; 
 let graphData = { utilisateurs: [], relations: [], serveurs: [] };
-// CHANGEMENT : Les serveurs sont cachés par défaut pour la clarté du réseau social
+// Les serveurs sont cachés par défaut pour la clarté du réseau social
 let serversVisible = false; 
 let serversHiddenLayout; 
 
@@ -219,12 +219,15 @@ const toggleServers = () => {
         linksToServers.hide();
         
         const newLayout = cy.layout({
-            name: 'concentric', 
+            name: 'cose', // Layout Cose pour un meilleur contrôle de l'espacement
             fit: true, 
             padding: 50, 
             animate: true, 
             animationDuration: 800,
-            minNodeSpacing: 50, // Répulsion modérée
+            // Paramètres pour un rapprochement modéré
+            nodeRepulsion: function(node){ return 20000; }, 
+            idealEdgeLength: function(edge){ return 10; },
+            initialTemp: 50,
             ready: function() {
                 serversHiddenLayout = cy.json();
             }
@@ -239,9 +242,12 @@ const toggleServers = () => {
         linksToServers.show();
 
         if (serversHiddenLayout) {
+             // Si on a sauvegardé l'état du layout avant de cacher, on le restaure.
              cy.json(serversHiddenLayout);
-             cy.layout({ name: 'concentric', fit: true, padding: 30 }).run();
+             // On peut relancer un concentric rapide pour une vue globale
+             cy.layout({ name: 'concentric', fit: true, padding: 30 }).run(); 
         } else {
+             // Sinon, on relance le layout complet
              cy.layout({ name: 'concentric', fit: true, padding: 30 }).run();
         }
 
@@ -321,15 +327,14 @@ const mettreAJourGraphe = (utilisateurs, relations, serveurs, forceRedraw = fals
     cyContainer.innerHTML = ''; 
     
     try {
+         // Layout initial basé sur concentric pour la première organisation
          cy = cytoscape({
             container: cyContainer, elements: elements, style: style,
-            // Layout initial rapide
             layout: { name: 'concentric', fit: true, padding: 30, animate: true, animationDuration: 500 }
         });
         document.getElementById('connexion-status').textContent = `Graphe chargé : ${utilisateurs.length} utilisateurs, ${serveurs.length} serveurs.`;
         
-        // ------------------------------------------------------------------
-        // NOUVEAU : Masquer les serveurs au chargement initial 
+        // --- Masquer les serveurs au chargement initial et optimiser l'espacement ---
         const servers = cy.nodes('[type = "serveur"]');
         const linksToServers = cy.edges('[type = "membre_de"]');
 
@@ -338,14 +343,17 @@ const mettreAJourGraphe = (utilisateurs, relations, serveurs, forceRedraw = fals
             servers.hide();
             linksToServers.hide();
             
-            // Relance un layout pour compacter les utilisateurs restants
+            // Relance un layout COSE pour compacter activement les utilisateurs restants
             cy.layout({ 
-                name: 'concentric', 
+                name: 'cose', 
                 fit: true, 
                 padding: 50,
                 animate: true,
-                animationDuration: 500,
-                minNodeSpacing: 50, // Ajustement de la répulsion modérée
+                animationDuration: 700,
+                // PARAMÈTRES POUR LE RAPPROCEMENT
+                nodeRepulsion: function(node){ return 20000; }, // Réduit fortement la répulsion
+                idealEdgeLength: function(edge){ return 10; }, // Tente de rapprocher les nœuds liés
+                initialTemp: 50, 
             }).run(); 
             
             serversVisible = false;
@@ -367,8 +375,6 @@ const mettreAJourGraphe = (utilisateurs, relations, serveurs, forceRedraw = fals
                 document.getElementById('path-result').innerHTML = ''; 
             }
         });
-        
-        // La gestion du bouton se fait par le code ci-dessus, le texte est mis à jour dans index.html
 
     } catch (e) { 
         console.error("Erreur lors de l'initialisation de Cytoscape:", e); 
