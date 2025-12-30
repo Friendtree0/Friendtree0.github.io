@@ -15,7 +15,8 @@
             <button id="btn-discord-connect">Se connecter via Discord</button>
             
             <button id="btn-reload-map" title="Recharge les données depuis la base de données persistante">Recharger la Carte (DB)</button>
-            <button id="btn-toggle-servers" title="Afficher/Masquer les nœuds de serveurs">Masquer les Serveurs</button>
+            
+            <button id="btn-toggle-servers" title="Afficher/Masquer les nœuds de serveurs">Afficher les Serveurs</button>
             
             <button id="btn-reset">Réinitialiser la Carte Locale</button>
         </div>
@@ -61,24 +62,24 @@
         </div>
     </div>
     
-    <div id="discord-modal" class="modal" style="display: none;">  
-    <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <h2>🔒 Connexion sécurisée via Discord</h2>
-        <p>En cliquant sur "Continuer", vous serez redirigé vers le site officiel de Discord pour autoriser notre application.</p>
-        
-        <h3>Ce que nous collectons :</h3>
-        <ul>
-            <li>**Votre ID utilisateur** (pour vous identifier).</li>
-            <li>**Votre nom d'utilisateur public** (pour l'affichage sur la carte).</li>
-            <li>**La liste des serveurs** que vous avez en commun avec les autres utilisateurs déjà enregistrés.</li>
-        </ul>
-        
-        <p style="font-weight: bold; color: #f04747;">⚠️ Aucune donnée de message, historique ou canal privé n'est collectée.</p>
+    <div id="discord-modal" class="modal" style="display: none;"> 
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>🔒 Connexion sécurisée via Discord</h2>
+            <p>En cliquant sur "Continuer", vous serez redirigé vers le site officiel de Discord pour autoriser notre application.</p>
+            
+            <h3>Ce que nous collectons :</h3>
+            <ul>
+                <li>**Votre ID utilisateur** (pour vous identifier).</li>
+                <li>**Votre nom d'utilisateur public** (pour l'affichage sur la carte).</li>
+                <li>**La liste des serveurs** que vous avez en commun avec les autres utilisateurs déjà enregistrés.</li>
+            </ul>
+            
+            <p style="font-weight: bold; color: #f04747;">⚠️ Aucune donnée de message, historique ou canal privé n'est collectée.</p>
 
-        <button id="btn-modal-continue" class="control-button" style="width: 100%; margin-top: 20px;">Continuer vers Discord</button>
+            <button id="btn-modal-continue" class="control-button" style="width: 100%; margin-top: 20px;">Continuer vers Discord</button>
+        </div>
     </div>
-</div>
     
     <script src="frontend/app.js"></script>
 </body>
