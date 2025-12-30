@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutoriel - Discord Social Graph</title>
+    <link rel="stylesheet" href="frontend/style.css">
+</head>
+<body>
+    <header>
+        <h1>Discord Social Graph</h1>
+    </header>
+
+    <nav class="main-nav">
+        <a href="index.html">Carte</a> |
+        <a href="confidentialite.html">Confidentialité</a> |
+        <a href="tutoriel.html">Tutoriel</a>
+    </nav>
+
+    <div id="info-container" style="max-width: 800px; margin: 30px auto; padding: 0 20px;">
+        <h2>Comment ça marche ?</h2>
+
+        <h3>Étape 1 : Connexion et Analyse</h3>
+        <ol>
+            <li>Cliquez sur le bouton "Se connecter via Discord" sur la page d'accueil.</li>
+            <li>Discord vous demandera d'autoriser l'application à voir votre profil et vos serveurs.</li>
+            <li>Une fois autorisé, l'application récupère votre liste de serveurs et stocke ces informations de manière permanente dans la base de données.</li>
+        </ol>
+
+        <h3>Étape 2 : Construction du Graphe</h3>
+        <p>Chaque utilisateur qui se connecte ajoute sa propre "carte" au système. Le graphe combine toutes ces cartes :</p>
+        <ul>
+            <li><strong>Les cercles</strong> représentent les utilisateurs.</li>
+            <li><strong>Les rectangles</strong> représentent les serveurs Discord.</li>
+            <li><strong>Les liens gris</strong> représentent l'appartenance d'un utilisateur à un serveur.</li>
+            <li><strong>Les liens rouges et épais</strong> (liens "serveur_commun") apparaissent entre deux utilisateurs qui partagent un ou plusieurs serveurs. Plus le lien est épais, plus vous partagez de serveurs.</li>
+        </ul>
+
+        <h3>Étape 3 : Utilisation du Graphe</h3>
+        <ul>
+            <li><strong>Déplacement :</strong> Vous pouvez glisser-déposer les nœuds pour mieux organiser la visualisation.</li>
+            <li><strong>Détails :</strong> Cliquez sur n'importe quel cercle ou rectangle pour afficher l'ID et les détails dans le panneau mobile de droite.</li>
+            <li><strong>Réinitialisation :</strong> Le bouton "Réinitialiser la Carte Locale" efface uniquement l'affichage actuel dans votre navigateur. Les données stockées dans la base de données restent intactes pour la prochaine session.</li>
+        </ul>
+    </div>
+</body>
+</html>
