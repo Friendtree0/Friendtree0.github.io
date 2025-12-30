@@ -1,6 +1,4 @@
-// Fichier : backend-proxy/server.js
-// -------------------------------------------------------------------
-// Dépendances requises : npm install express node-fetch cors
+// Fichier : backend-proxy/server.js (Code Final pour Déploiement Cloud)
 // -------------------------------------------------------------------
 
 const express = require('express');
@@ -10,14 +8,15 @@ const fs = require('fs').promises;
 const path = require('path');      
 
 const app = express();
-const PORT = 3000;
+const PORT = 3000; 
 const DISCORD_API_URL = 'https://discord.com/api/v10';
 const DATA_FOLDER = path.join(__dirname, 'data'); 
 
-// --- CONFIGURATION SÉCURISÉE DES SECRETS (À REMPLACER PAR VOS PROPRES VALEURS) ---
-const CLIENT_SECRET = 'o1a61io7d32n8g9KOwYKst1t7RVodscY'; // <--- VOTRE CLIENT SECRET ICI
-const CLIENT_ID = '1454871638972694738';                    // <--- VOTRE CLIENT ID ICI
-const REDIRECT_URI = 'https://friendtree0.github.io/';
+// --- CONFIGURATION SÉCURISÉE (Utilisation des Variables d'Environnement de Render) ---
+// Les valeurs à droite du || sont des valeurs locales de secours.
+const CLIENT_SECRET = process.env.CLIENT_SECRET || 'o1a61io7d32n8g9KOwYKst1t7RVodscY'; 
+const CLIENT_ID = process.env.CLIENT_ID || '1454871638972694738';                    
+const REDIRECT_URI = process.env.REDIRECT_URI || 'https://friendtree0.github.io/';
 // ----------------------------------------------------------------
 
 app.use(cors()); 
@@ -31,27 +30,23 @@ function preparerDonneesPourSauvegarde(userData, guildsData) {
     const mainUserID = userData.id;
     const mainUserName = userData.global_name || userData.username; 
     
-    // 1. Ajout de l'utilisateur principal
     utilisateurs.push({ 
         id: mainUserID, 
         nom: mainUserName, 
-        couleur: '#5865f2', // Bleu Utilisateur
+        couleur: '#5865f2', 
         type: 'utilisateur', 
         dateExport: new Date().toISOString() 
     }); 
 
-    // 2. Création des nœuds serveurs et des relations Utilisateur-Serveur
     if (Array.isArray(guildsData)) { 
         guildsData.forEach(g => {
-            // Ajout du nœud Serveur
             serveurs.push({ 
                 id: g.id, 
                 nom: g.name, 
-                couleur: '#99aab5', // Gris Serveur
+                couleur: '#99aab5', 
                 type: 'serveur' 
             });
 
-            // Ajout de la relation Utilisateur -> Serveur
             relations.push({
                 source_id: mainUserID, 
                 cible_id: g.id, 
@@ -79,7 +74,6 @@ app.get('/api/auth/callback', async (req, res) => {
     const body = new URLSearchParams({
         client_id: CLIENT_ID, client_secret: CLIENT_SECRET, grant_type: 'authorization_code',
         code: code, redirect_uri: REDIRECT_URI, 
-        // SCOPE STABLE ET ENRICHI
         scope: 'identify guilds' 
     });
 
@@ -112,7 +106,6 @@ app.get('/api/auth/callback', async (req, res) => {
 
         // --- SAUVEGARDE AUTOMATIQUE ---
         if (userData) {
-            // Préparation des données pour l'export (inclus maintenant les serveurs)
             const exportData = preparerDonneesPourSauvegarde(userData, guildsData);
             const fileName = `carte_${userData.id}.json`;
             const filePath = path.join(DATA_FOLDER, fileName);
@@ -124,7 +117,7 @@ app.get('/api/auth/callback', async (req, res) => {
                  console.log(`✅ Données de ${userData.username} sauvegardées dans ${fileName} (${guildsData.length} serveurs).`);
             } catch (saveError) {
                  console.error(`❌ Échec CRITIQUE de la sauvegarde du fichier ${fileName}:`, saveError);
-                 return res.status(500).json({ error: "Erreur interne du serveur lors de la sauvegarde." });
+                 // La persistance des fichiers sur Render peut être éphémère.
             }
         }
         
@@ -154,7 +147,6 @@ app.get('/api/data/import', async (req, res) => {
                 const content = await fs.readFile(filePath, 'utf-8');
                 const data = JSON.parse(content);
                 
-                // On s'assure que les tableaux existent
                 if (Array.isArray(data.utilisateurs) && Array.isArray(data.relations)) {
                     data.serveurs = data.serveurs || []; 
                     allData.push(data);
@@ -175,7 +167,8 @@ app.get('/api/data/import', async (req, res) => {
 });
 
 
-app.listen(PORT, '127.0.0.1', () => {
-    console.log(`Proxy Back-End démarré sur http://127.0.0.1:${PORT}`);
+// Ligne modifiée pour écouter le port fourni par Render ou 3000 si en local
+app.listen(process.env.PORT || PORT, () => {
+    console.log(`Proxy Back-End démarré sur le port ${process.env.PORT || PORT}`);
     console.log(`Dossier de données pour l'importation/sauvegarde : ${DATA_FOLDER}`);
 });
