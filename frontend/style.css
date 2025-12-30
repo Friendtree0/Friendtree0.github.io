@@ -1,192 +1,79 @@
-/* Fichier : frontend/style.css (CODE COMPLET FINAL) */
+/* Fichier : frontend/style.css (AJOUTS/MODIFICATIONS) */
 
-/* --- RESET & FOND (Discord Theme) --- */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color: #36393f; /* Arrière-plan sombre Discord */
-    color: #ffffff;
-    min-height: 100vh;
-}
+/* --- PANNEAU DE CONTRÔLE FLOTTANT ET DÉTAILS --- */
 
-/* --- HEADER ET CONTRÔLES --- */
-header {
-    background-color: #2f3136; /* Couleur des canaux/panneaux Discord */
-    padding: 15px 20px;
-    border-bottom: 1px solid #202225;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap; /* Permet aux boutons de passer à la ligne si l'écran est petit */
-}
-
-header h1 {
-    font-size: 1.8em;
-    color: #ffffff;
-    margin: 0;
-}
-
-#controls {
-    display: flex;
-    gap: 10px; /* Espace entre les boutons */
-    margin-top: 5px;
-}
-
-#controls button {
-    background-color: #5865f2; /* Bleu Discord */
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.2s;
-    white-space: nowrap; /* Empêche les boutons de se couper */
-}
-
-#controls button:hover {
-    background-color: #4752c4;
-}
-
-/* --- STATUT DE CONNEXION --- */
-#connexion-status {
-    background-color: #40444b;
-    color: #b9bbbe;
-    padding: 10px 20px;
-    font-size: 0.9em;
-    text-align: center;
-    border-bottom: 1px solid #202225;
-}
-
-/* --- CONTENEUR PRINCIPAL ET GRAPHE --- */
-#main-container {
-    display: flex;
-    position: relative;
-    /* Hauteur calculée: 100vh - (header + nav + status) */
-    height: calc(100vh - 145px); 
-    min-height: 500px;
-}
-
-#cy {
-    flex-grow: 1;
-    background-color: #36393f;
-    min-width: 50%;
-    height: 100%;
-}
-
-/* --- PANNEAU DE DÉTAILS DRAGGABLE --- */
-.draggable-panel {
+/* Appliquer le style Draggable uniquement au Panneau de Contrôle */
+#control-panel {
     position: absolute;
-    top: 50px;
-    right: 20px;
+    top: 10px;
+    left: 10px;
     width: 300px;
     background-color: #2f3136;
     border: 1px solid #202225;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    cursor: move; /* Indique qu'il est déplaçable */
+    cursor: move; /* Rendu draggable */
     z-index: 10;
     padding: 15px;
 }
 
-.draggable-panel h2 {
-    color: #7289da;
-    font-size: 1.2em;
-    margin-top: 0;
-    padding-bottom: 5px;
-    border-bottom: 1px solid #4f545c;
-    cursor: move; 
-}
-
-#details-content p {
-    margin: 5px 0;
-    font-size: 0.9em;
-}
-
-#details-content strong {
-    color: #ffffff;
-}
-
-#details-content code {
-    background-color: #40444b;
-    padding: 2px 4px;
-    border-radius: 3px;
-    font-family: 'Consolas', monospace;
-    font-size: 0.85em;
-    color: #d1d2d3;
-    user-select: all; 
-    cursor: text;
-}
-
-/* Boutons Localiser/Trajet dans le panneau de détails */
-.draggable-panel button {
-    margin-top: 5px;
-    font-size: 0.8em;
-    padding: 6px 10px;
-}
-
-
-/* --- NAVIGATION ET PAGES D'INFORMATION (CONFIDENTIALITE/TUTORIEL) --- */
-
-.main-nav {
-    text-align: center;
-    padding: 10px 0;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #4f545c;
-    background-color: #2c2f33; 
-}
-
-.main-nav a {
-    color: #99aab5;
-    text-decoration: none;
-    padding: 0 15px;
-    font-weight: bold;
-    transition: color 0.2s;
-}
-
-.main-nav a:hover {
-    color: #ffffff; 
-}
-
-/* Conteneur des pages d'information (confidentialite.html, tutoriel.html) */
-#info-container {
-    background-color: #2c2f33;
-    padding: 20px;
+/* Le panneau de Détails n'a plus le curseur 'move' car c'est 'control-panel' qui gère le drag */
+#details-panel {
+    position: absolute;
+    top: 10px;
+    right: 10px; /* Positionné à droite */
+    width: 300px;
+    background-color: #2f3136;
+    border: 1px solid #202225;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    max-width: 800px;
-    margin: 30px auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    cursor: default; /* Ne plus rendre draggable par défaut */
+    z-index: 10;
+    padding: 15px;
 }
 
-#info-container h2, #info-container h3 {
-    color: #7289da; /* Bleu Discord */
-    border-bottom: 1px solid #4f545c;
-    padding-bottom: 5px;
-    margin-top: 20px;
+#control-panel h3 {
+    color: #7289da;
+    font-size: 1.1em;
+    margin-top: 15px;
+    margin-bottom: 5px;
 }
 
-#info-container p, #info-container li {
-    color: #ffffff;
-    line-height: 1.6;
+#control-panel label {
+    display: block;
+    color: #b9bbbe;
+    font-size: 0.85em;
+    margin-top: 10px;
 }
 
-#info-container ul, #info-container ol {
-    padding-left: 20px;
+#control-panel input[type="text"] {
+    width: calc(100% - 10px);
+    padding: 8px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+    border: 1px solid #40444b;
+    border-radius: 4px;
+    background-color: #40444b;
+    color: white;
 }
 
-/* --- CYTOSCAPE CLASSES POUR LES FONCTIONS AVANCÉES --- */
-
-/* Style pour mettre en évidence un nœud (Localiser et Trajet) */
-#cy .highlighted {
-    border-width: 5px !important; 
-    border-color: #ffcc00 !important; /* Jaune vif pour le focus */
-    z-index: 100;
+#control-panel .control-button {
+    width: 100%;
+    background-color: #5865f2;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: background-color 0.2s;
 }
 
-/* Style pour mettre en évidence les arêtes (Trajet) */
-#cy .path {
-    line-color: #ffcc00 !important; /* Jaune vif pour le chemin */
-    width: 5 !important;
-    z-index: 90;
+#control-panel .control-button:hover {
+    background-color: #4752c4;
+}
+
+#control-panel hr {
+    border-color: #40444b;
+    margin: 15px 0;
 }
