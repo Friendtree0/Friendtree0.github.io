@@ -1,213 +1,161 @@
-/*
- * Fichier : style.css
- * Thème : Sombre, Vibrant, inspiré par l'esthétique "Gamer/Discord"
- */
+/* Fichier : frontend/style.css (CODE COMPLET) */
 
-/* --- Variables de couleur --- */
-:root {
-    --bg-primary: #1e1f22; /* Très sombre, presque noir */
-    --bg-secondary: #282b30; /* Arrière-plan des panneaux */
-    --text-color: #f6f6f7; /* Texte très clair */
-    --accent-discord: #5865f2; /* Bleu Discord standard */
-    --accent-vibrant: #7289da; /* Bleu/Violet vibrant pour l'interactivité */
-    --border-color: #3f4044; /* Bordure subtile */
-    --shadow-color: rgba(0, 0, 0, 0.5); 
-}
-
-/* --- Base et mise en page --- */
-
+/* --- RESET & FOND (Discord Theme) --- */
 body {
-    background-color: var(--bg-primary);
-    color: var(--text-color);
-    font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 0;
-    line-height: 1.6;
-    display: flex;
-    flex-direction: column;
+    font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #36393f; /* Arrière-plan sombre Discord */
+    color: #ffffff;
     min-height: 100vh;
 }
 
+/* --- HEADER ET CONTRÔLES --- */
 header {
-    background-color: var(--bg-secondary);
-    padding: 20px 40px;
-    border-bottom: 3px solid var(--accent-vibrant); 
-    box-shadow: 0 5px 15px var(--shadow-color);
+    background-color: #2f3136; /* Couleur des canaux/panneaux Discord */
+    padding: 15px 20px;
+    border-bottom: 1px solid #202225;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 header h1 {
+    font-size: 1.8em;
+    color: #ffffff;
     margin: 0;
-    color: #fff;
-    font-size: 2em;
-    text-shadow: 2px 2px 5px var(--accent-discord);
 }
 
+#controls button {
+    background-color: #5865f2; /* Bleu Discord */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-left: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+}
+
+#controls button:hover {
+    background-color: #4752c4;
+}
+
+/* --- STATUT DE CONNEXION --- */
 #connexion-status {
-    font-size: 1em;
+    background-color: #40444b;
     color: #b9bbbe;
-    margin-top: 5px;
+    padding: 10px 20px;
+    font-size: 0.9em;
+    text-align: center;
+    border-bottom: 1px solid #202225;
 }
 
-main {
-    padding: 30px 40px;
-    flex-grow: 1;
-}
-
-/* --- Conteneur général (Gardé pour les contrôles, mais le panneau est fixe) --- */
-
-#content-container {
-    /* Laissons-le en flex pour les contrôles et la zone de graphe */
-    display: flex; 
-    flex-direction: column;
-    gap: 30px;
-    margin-top: 20px;
-}
-
-/* --- Zone du graphe (Cytoscape) --- */
-
-#graph-area {
-    flex: 1;
+/* --- CONTENEUR PRINCIPAL ET GRAPHE --- */
+#main-container {
+    display: flex;
+    position: relative;
+    height: calc(100vh - 145px); /* Hauteur calculée pour laisser de la place au header/nav/status */
+    min-height: 500px;
 }
 
 #cy {
-    width: 100%;
-    height: 700px; 
-    background-color: #222327; 
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    box-shadow: 0 0 15px rgba(114, 137, 218, 0.3);
-    transition: all 0.3s ease-in-out;
+    flex-grow: 1;
+    background-color: #36393f;
+    min-width: 50%;
+    height: 100%;
 }
 
-#cy:hover {
-     box-shadow: 0 0 25px rgba(114, 137, 218, 0.6);
-}
-
-#graph-area h2 {
-    color: var(--text-color);
-    margin-top: 0;
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 10px;
-}
-
-/* --- Panneau de contrôle et boutons --- */
-
-#controls {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 25px;
-    padding: 20px;
-    background-color: var(--bg-secondary);
-    border-radius: 10px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 4px 10px var(--shadow-color);
-}
-
-button {
-    padding: 12px 25px;
-    border: none;
+/* --- PANNEAU DE DÉTAILS DRAGGABLE --- */
+.draggable-panel {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    width: 300px;
+    background-color: #2f3136;
+    border: 1px solid #202225;
     border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1.05em;
-    text-transform: uppercase;
-    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    cursor: move; /* Indique qu'il est déplaçable */
+    z-index: 10;
+    padding: 15px;
 }
 
-#btn-discord-connect {
-    background-color: var(--accent-discord);
-    color: #fff;
-    box-shadow: 0 4px 0 var(--accent-vibrant);
-}
-
-#btn-discord-connect:hover {
-    background-color: #4e5d94; 
-    transform: translateY(2px); 
-    box-shadow: 0 2px 0 var(--accent-vibrant); 
-}
-
-.secondary {
-    background-color: #40444b;
-    color: var(--text-color);
-    box-shadow: 0 4px 0 #3a3f45;
-}
-
-.secondary:hover {
-    background-color: #585c64;
-    transform: translateY(2px);
-    box-shadow: 0 2px 0 #3a3f45;
-}
-
-/* --- Panneau de détails (Flottant / Draggable) --- */
-
-#details-panel {
-    position: fixed; /* Rendre le panneau flottant */
-    top: 150px;      /* Position initiale */
-    right: 40px;     /* Position initiale */
-    width: 300px;    /* Largeur fixe */
-    max-height: 80vh; 
-    overflow-y: auto; 
-
-    background-color: var(--bg-secondary);
-    padding: 25px;
-    border-radius: 10px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-    
-    cursor: grab; /* Curseur pour indiquer qu'il est mobile */
-    z-index: 1000; 
-}
-
-#details-panel:active {
-    cursor: grabbing;
-}
-
-#details-panel h2 {
-    color: var(--accent-vibrant);
+.draggable-panel h2 {
+    color: #7289da;
+    font-size: 1.2em;
     margin-top: 0;
-    border-bottom: 2px solid var(--accent-discord);
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-    font-size: 1.5em;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #4f545c;
+    cursor: move; /* Cible pour le drag */
 }
 
 #details-content p {
-    margin-bottom: 10px;
-    font-size: 1em;
+    margin: 5px 0;
+    font-size: 0.9em;
 }
 
 #details-content strong {
-    color: var(--accent-vibrant);
+    color: #ffffff;
 }
 
 #details-content code {
-    background-color: #2e3035;
-    color: #ff99ff; 
-    padding: 3px 6px;
-    border-radius: 5px;
-    font-size: 0.95em;
-    border: 1px dashed #4f545c;
+    background-color: #40444b;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: 'Consolas', monospace;
+    font-size: 0.85em;
+    color: #d1d2d3;
+    user-select: all; /* Permet de copier facilement l'ID */
+    cursor: text;
 }
 
-/* --- Footer --- */
+/* --- NAVIGATION ET PAGES D'INFORMATION (CONFIDENTIALITE/TUTORIEL) --- */
 
-footer {
-    background-color: var(--bg-secondary);
-    color: #72767d;
+.main-nav {
     text-align: center;
-    padding: 15px 0;
-    margin-top: auto;
-    border-top: 1px solid var(--border-color);
+    padding: 10px 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #4f545c;
+    background-color: #2c2f33; /* Couleur de fond Discord pour la barre */
 }
 
-/* --- Responsive design --- */
+.main-nav a {
+    color: #99aab5;
+    text-decoration: none;
+    padding: 0 15px;
+    font-weight: bold;
+    transition: color 0.2s;
+}
 
-@media (max-width: 1000px) {
-    /* Le panneau flottant reste en position fixe, mais on peut ajuster sa position sur mobile */
-    #details-panel {
-        top: 50px;
-        left: 50%;
-        transform: translateX(-50%); /* Centrer horizontalement */
-        width: 90%;
-    }
+.main-nav a:hover {
+    color: #ffffff; 
+}
+
+/* Conteneur des pages d'information (confidentialite.html, tutoriel.html) */
+#info-container {
+    background-color: #2c2f33;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    /* Style de centrage pour les pages d'info */
+    max-width: 800px;
+    margin: 30px auto;
+}
+
+#info-container h2, #info-container h3 {
+    color: #7289da; /* Bleu Discord */
+    border-bottom: 1px solid #4f545c;
+    padding-bottom: 5px;
+    margin-top: 20px;
+}
+
+#info-container p, #info-container li {
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+#info-container ul, #info-container ol {
+    padding-left: 20px;
 }
