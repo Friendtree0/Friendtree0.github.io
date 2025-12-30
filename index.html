@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Social Graph</title>
+    
+    <link rel="stylesheet" href="frontend/style.css"> 
+    
+    <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Discord Social Graph</h1>
+        <div id="controls">
+            <button id="btn-discord-connect">Se connecter via Discord</button>
+            <button id="btn-reset">Réinitialiser la Carte Locale</button>
+        </div>
+    </header>
+
+    <div id="connexion-status">Statut : Chargement initial...</div>
+
+    <div id="main-container">
+        <div id="cy"></div>
+
+        <div id="details-panel" class="draggable-panel" style="display:none;">
+            <h2>Détails du Nœud</h2>
+            <div id="details-content">
+                Cliquez sur un utilisateur sur le graphe pour voir les détails ici.
+            </div>
+        </div>
+    </div>
+    
+    <script src="frontend/app.js"></script>
+</body>
+</html>
