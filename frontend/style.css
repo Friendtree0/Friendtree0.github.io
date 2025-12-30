@@ -1,0 +1,213 @@
+/*
+ * Fichier : style.css
+ * Thème : Sombre, Vibrant, inspiré par l'esthétique "Gamer/Discord"
+ */
+
+/* --- Variables de couleur --- */
+:root {
+    --bg-primary: #1e1f22; /* Très sombre, presque noir */
+    --bg-secondary: #282b30; /* Arrière-plan des panneaux */
+    --text-color: #f6f6f7; /* Texte très clair */
+    --accent-discord: #5865f2; /* Bleu Discord standard */
+    --accent-vibrant: #7289da; /* Bleu/Violet vibrant pour l'interactivité */
+    --border-color: #3f4044; /* Bordure subtile */
+    --shadow-color: rgba(0, 0, 0, 0.5); 
+}
+
+/* --- Base et mise en page --- */
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-color);
+    font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background-color: var(--bg-secondary);
+    padding: 20px 40px;
+    border-bottom: 3px solid var(--accent-vibrant); 
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+header h1 {
+    margin: 0;
+    color: #fff;
+    font-size: 2em;
+    text-shadow: 2px 2px 5px var(--accent-discord);
+}
+
+#connexion-status {
+    font-size: 1em;
+    color: #b9bbbe;
+    margin-top: 5px;
+}
+
+main {
+    padding: 30px 40px;
+    flex-grow: 1;
+}
+
+/* --- Conteneur général (Gardé pour les contrôles, mais le panneau est fixe) --- */
+
+#content-container {
+    /* Laissons-le en flex pour les contrôles et la zone de graphe */
+    display: flex; 
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+/* --- Zone du graphe (Cytoscape) --- */
+
+#graph-area {
+    flex: 1;
+}
+
+#cy {
+    width: 100%;
+    height: 700px; 
+    background-color: #222327; 
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(114, 137, 218, 0.3);
+    transition: all 0.3s ease-in-out;
+}
+
+#cy:hover {
+     box-shadow: 0 0 25px rgba(114, 137, 218, 0.6);
+}
+
+#graph-area h2 {
+    color: var(--text-color);
+    margin-top: 0;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+/* --- Panneau de contrôle et boutons --- */
+
+#controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding: 20px;
+    background-color: var(--bg-secondary);
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 10px var(--shadow-color);
+}
+
+button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.05em;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+#btn-discord-connect {
+    background-color: var(--accent-discord);
+    color: #fff;
+    box-shadow: 0 4px 0 var(--accent-vibrant);
+}
+
+#btn-discord-connect:hover {
+    background-color: #4e5d94; 
+    transform: translateY(2px); 
+    box-shadow: 0 2px 0 var(--accent-vibrant); 
+}
+
+.secondary {
+    background-color: #40444b;
+    color: var(--text-color);
+    box-shadow: 0 4px 0 #3a3f45;
+}
+
+.secondary:hover {
+    background-color: #585c64;
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #3a3f45;
+}
+
+/* --- Panneau de détails (Flottant / Draggable) --- */
+
+#details-panel {
+    position: fixed; /* Rendre le panneau flottant */
+    top: 150px;      /* Position initiale */
+    right: 40px;     /* Position initiale */
+    width: 300px;    /* Largeur fixe */
+    max-height: 80vh; 
+    overflow-y: auto; 
+
+    background-color: var(--bg-secondary);
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+    
+    cursor: grab; /* Curseur pour indiquer qu'il est mobile */
+    z-index: 1000; 
+}
+
+#details-panel:active {
+    cursor: grabbing;
+}
+
+#details-panel h2 {
+    color: var(--accent-vibrant);
+    margin-top: 0;
+    border-bottom: 2px solid var(--accent-discord);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+#details-content p {
+    margin-bottom: 10px;
+    font-size: 1em;
+}
+
+#details-content strong {
+    color: var(--accent-vibrant);
+}
+
+#details-content code {
+    background-color: #2e3035;
+    color: #ff99ff; 
+    padding: 3px 6px;
+    border-radius: 5px;
+    font-size: 0.95em;
+    border: 1px dashed #4f545c;
+}
+
+/* --- Footer --- */
+
+footer {
+    background-color: var(--bg-secondary);
+    color: #72767d;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: auto;
+    border-top: 1px solid var(--border-color);
+}
+
+/* --- Responsive design --- */
+
+@media (max-width: 1000px) {
+    /* Le panneau flottant reste en position fixe, mais on peut ajuster sa position sur mobile */
+    #details-panel {
+        top: 50px;
+        left: 50%;
+        transform: translateX(-50%); /* Centrer horizontalement */
+        width: 90%;
+    }
+}
