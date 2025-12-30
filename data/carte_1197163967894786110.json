@@ -1,0 +1,99 @@
+{
+  "utilisateurs": [
+    {
+      "id": "1197163967894786110",
+      "nom": "Flower's",
+      "couleur": "#5865f2",
+      "type": "utilisateur",
+      "dateExport": "2025-12-29T22:08:24.664Z"
+    }
+  ],
+  "relations": [
+    {
+      "source_id": "1197163967894786110",
+      "cible_id": "154777837382008833",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "1197163967894786110",
+      "cible_id": "477474092216352778",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "1197163967894786110",
+      "cible_id": "885703580064043008",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "1197163967894786110",
+      "cible_id": "1215964497005514823",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "1197163967894786110",
+      "cible_id": "1268243345436708936",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "1197163967894786110",
+      "cible_id": "1382356453158817883",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "1197163967894786110",
+      "cible_id": "1389305979170062346",
+      "poids": 1,
+      "type": "membre_de"
+    }
+  ],
+  "serveurs": [
+    {
+      "id": "154777837382008833",
+      "nom": "Minecraft Commands",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "477474092216352778",
+      "nom": "Atlas (Formerly: Coasters & Crafters)",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "885703580064043008",
+      "nom": "Charli xcx",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1215964497005514823",
+      "nom": "Skull Empire",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1268243345436708936",
+      "nom": "La Zerex",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1382356453158817883",
+      "nom": "Black Hole Studio 🚀",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1389305979170062346",
+      "nom": "Charli XCX",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    }
+  ]
+}

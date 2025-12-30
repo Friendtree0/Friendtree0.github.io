@@ -1,0 +1,1191 @@
+{
+  "utilisateurs": [
+    {
+      "id": "963079950582304908",
+      "nom": "Banou",
+      "couleur": "#5865f2",
+      "type": "utilisateur",
+      "dateExport": "2025-12-29T22:03:33.086Z"
+    }
+  ],
+  "relations": [
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "135877399391764480",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "154777837382008833",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "223070469148901376",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "350185814640295936",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "356386012819226625",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "419259033355026442",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "506029988680695818",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "523059903812599811",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "547113544441659402",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "627909396697055232",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "641320634269564978",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "672640396844728320",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "710871326557995079",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "714174111752126605",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "731912900670783561",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "756549194495426610",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "790152830081040405",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "814146463491555358",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "815988245933457470",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "822426820447567872",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "826493503018106950",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "833066646737780778",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "845923589315756052",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "849274418140282930",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "871791372401782824",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "872508627607511091",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "881279559998267452",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "883615586188402718",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "885703580064043008",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "894160760073236520",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "898602021576405032",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "900128427150028811",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "927584661520121866",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "939949782334590997",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "941622513920778290",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "945750422700838922",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "951951353272471612",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "970717730405748777",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "981297310472482886",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1014562900452577312",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1019184268070633503",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1043612654041825330",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1046440898113847378",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1062805182028726413",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1073665333640040458",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1074379179816144986",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1078618221608980530",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1082279256068997150",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1086635448853614692",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1097135803219574894",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1109793281979711609",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1136234665955561583",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1161296442577653802",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1184157828127141888",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1195308222278537226",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1198124508087861278",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1203777186616578058",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1208405599864229938",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1212306946473074688",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1212460596621217855",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1215715163894714468",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1221008032750895154",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1228301411251388426",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1231896906754424842",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1236125835866537994",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1236639635023597568",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1249296575025385562",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1264565563988906108",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1265017688560766988",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1268243345436708936",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1269744436200603659",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1271028126796877834",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1275114523895922760",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1281451281646616606",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1281906729969385472",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1282364441282871347",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1300850943428001843",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1303433178903740446",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1304560548855418880",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1309431559094272081",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1314944229608259665",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1318924231576125531",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1328093652806926427",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1334811816760442882",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1341114999082455150",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1341518316178509968",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1348711458795556904",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1349200415236821093",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1355655932163653632",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1357034513120759898",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1360287896791289886",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1366055199386636288",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1370791220925694054",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1374919879613874236",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1382356453158817883",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1423008746321219646",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1435239864273600667",
+      "poids": 1,
+      "type": "membre_de"
+    },
+    {
+      "source_id": "963079950582304908",
+      "cible_id": "1436244051291668533",
+      "poids": 1,
+      "type": "membre_de"
+    }
+  ],
+  "serveurs": [
+    {
+      "id": "135877399391764480",
+      "nom": "skUnity",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "154777837382008833",
+      "nom": "Minecraft Commands",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "223070469148901376",
+      "nom": "Creators Area",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "350185814640295936",
+      "nom": "Communauté - FuzeIII",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "356386012819226625",
+      "nom": "Paladium",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "419259033355026442",
+      "nom": "play.epm-resort.eu",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "506029988680695818",
+      "nom": "Communauté Minecraft Fr",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "523059903812599811",
+      "nom": "Hytale",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "547113544441659402",
+      "nom": "Feori RPG",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "627909396697055232",
+      "nom": "Tahyme 🟠🔵",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "641320634269564978",
+      "nom": "Honeyfrost - Minecraft",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "672640396844728320",
+      "nom": "Netherix Studios ❄",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "710871326557995079",
+      "nom": "Nico's Safe Space",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "714174111752126605",
+      "nom": "VIP Lounge",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "731912900670783561",
+      "nom": "Olympe - Communauté",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "756549194495426610",
+      "nom": "Zaky’s friends",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "790152830081040405",
+      "nom": "🛑 CMFR - STAFF",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "814146463491555358",
+      "nom": "Pikstyle",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "815988245933457470",
+      "nom": "Zenavia - Minecraft Server",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "822426820447567872",
+      "nom": "BotGhost 👻🎅",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "826493503018106950",
+      "nom": "Temple du Stream",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "833066646737780778",
+      "nom": "Fiouze (Tournage)",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "845923589315756052",
+      "nom": "EventTime",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "849274418140282930",
+      "nom": "MCModels.net",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "871791372401782824",
+      "nom": "Modded",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "872508627607511091",
+      "nom": "Le Terrier",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "881279559998267452",
+      "nom": "ish's State",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "883615586188402718",
+      "nom": "Rivrs ▪ Community",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "885703580064043008",
+      "nom": "Charli xcx",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "894160760073236520",
+      "nom": "HebergTonServ",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "898602021576405032",
+      "nom": "PureHost - Hébergement Cloud & Game",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "900128427150028811",
+      "nom": "CurseForge Authors",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "927584661520121866",
+      "nom": "╭☆☆ La Secte ☆☆╮",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "939949782334590997",
+      "nom": "𝗚𝗮𝗺𝗲 𝗛𝗼𝘂𝘀𝗲™ 🌿",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "941622513920778290",
+      "nom": "WinHeberg",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "945750422700838922",
+      "nom": "Wyntale",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "951951353272471612",
+      "nom": "EndMC - Minecraft",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "970717730405748777",
+      "nom": "Dragon Moded Genesis",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "981297310472482886",
+      "nom": "Jivreuh's corp",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1014562900452577312",
+      "nom": "Different Hub | Builder's Team",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1019184268070633503",
+      "nom": "Shortcut",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1043612654041825330",
+      "nom": "Pixel Art Universe - FR",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1046440898113847378",
+      "nom": "Mock",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1062805182028726413",
+      "nom": "Sorad Gang",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1073665333640040458",
+      "nom": "community of coolest",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1074379179816144986",
+      "nom": "THE MYNE ⛏",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1078618221608980530",
+      "nom": "MineHeaven.fr",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1082279256068997150",
+      "nom": "SandBlock Universe",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1086635448853614692",
+      "nom": "PLAY.WYNBOX.FR - SERVEUR BOX 2025",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1097135803219574894",
+      "nom": "Craftverse",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1109793281979711609",
+      "nom": "Serveur de Folkl0rique",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1136234665955561583",
+      "nom": "DiscorAds",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1161296442577653802",
+      "nom": "Aywen Communauté",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1184157828127141888",
+      "nom": "⚡Wynvers",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1195308222278537226",
+      "nom": "FranceTiers | TL 1.21+",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1198124508087861278",
+      "nom": "Slash",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1203777186616578058",
+      "nom": "Mineplay",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1208405599864229938",
+      "nom": "Serveur des racistes",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1212306946473074688",
+      "nom": "MineCube | Serveur Minecraft (FFA/Mini-Jeux)",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1212460596621217855",
+      "nom": "The Marquise's March (doctor4t)",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1215715163894714468",
+      "nom": "✨NeoHeberg.fr",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1221008032750895154",
+      "nom": "Overtoon",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1228301411251388426",
+      "nom": "IceLoup's Parking",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1231896906754424842",
+      "nom": "EPITYGMATA",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1236125835866537994",
+      "nom": "LIFE HORIZON",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1236639635023597568",
+      "nom": "ounzi — portfolio",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1249296575025385562",
+      "nom": "SHELTER",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1264565563988906108",
+      "nom": "Bot term of service",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1265017688560766988",
+      "nom": "La Terre Promise",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1268243345436708936",
+      "nom": "La Zerex",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1269744436200603659",
+      "nom": "JKMC - Mini-jeux 1.21",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1271028126796877834",
+      "nom": "MineStudio | Le Studio minecraft ! + de 8 Services !",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1275114523895922760",
+      "nom": "??? RPG [REFONTE]",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1281451281646616606",
+      "nom": "Frostlight Studios",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1281906729969385472",
+      "nom": "La Terre Oubliée",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1282364441282871347",
+      "nom": "[V2] Tatacraft 1.21.10 🦋",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1300850943428001843",
+      "nom": "Raven",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1303433178903740446",
+      "nom": "Planet Coaster France",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1304560548855418880",
+      "nom": "MultiGames Studios",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1309431559094272081",
+      "nom": "EPI Studios",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1314944229608259665",
+      "nom": "Edrya",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1318924231576125531",
+      "nom": "All Will Fall",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1328093652806926427",
+      "nom": "FranceTiers Events | 1.21+",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1334811816760442882",
+      "nom": "meek basement",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1341114999082455150",
+      "nom": "Alliance du schizo",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1341518316178509968",
+      "nom": "Jeu test 1",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1348711458795556904",
+      "nom": "Good Vibes",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1349200415236821093",
+      "nom": "/brat #2025",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1355655932163653632",
+      "nom": "Codella",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1357034513120759898",
+      "nom": "ibuild.fr - Java/Bedrock 1.21+",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1360287896791289886",
+      "nom": "Hepha | Open",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1366055199386636288",
+      "nom": "TenshiMC Staff",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1370791220925694054",
+      "nom": "PrumaHost.fr - Hébergement Cloud & Game",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1374919879613874236",
+      "nom": "CreativeMode",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1382356453158817883",
+      "nom": "Black Hole Studio 🚀",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1423008746321219646",
+      "nom": "Extraction PROTOCOL",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1435239864273600667",
+      "nom": "Razzia.club 💎 | Ranked",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    },
+    {
+      "id": "1436244051291668533",
+      "nom": "TenshiMC - Serveur Minecraft",
+      "couleur": "#99aab5",
+      "type": "serveur"
+    }
+  ]
+}
