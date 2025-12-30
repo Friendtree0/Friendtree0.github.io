@@ -1,45 +1,61 @@
-<header>
-    <h1>Discord Social Graph</h1>
-    <div id="controls">
-        <button id="btn-discord-connect">Se connecter via Discord</button>
-        <button id="btn-reload-map" title="Recharge les données depuis la base de données persistante">Recharger la Carte (DB)</button>
-        <button id="btn-toggle-servers" title="Afficher/Masquer les nœuds de serveurs">Masquer les Serveurs</button>
-        <button id="btn-reset">Réinitialiser la Carte Locale</button>
-    </div>
-</header>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Social Graph</title>
+    
+    <link rel="stylesheet" href="frontend/style.css"> 
+    <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Discord Social Graph</h1>
+        <div id="controls">
+            <button id="btn-discord-connect">Se connecter via Discord</button>
+            
+            <button id="btn-reload-map" title="Recharge les données depuis la base de données persistante">Recharger la Carte (DB)</button>
+            <button id="btn-toggle-servers" title="Afficher/Masquer les nœuds de serveurs">Masquer les Serveurs</button>
+            
+            <button id="btn-reset">Réinitialiser la Carte Locale</button>
+        </div>
+    </header>
 
-<nav class="main-nav">
-    <a href="index.html">Carte</a> |
-    <a href="confidentialite.html">Confidentialité</a> |
-    <a href="tutoriel.html">Tutoriel</a> 
-</nav>
+    <nav class="main-nav">
+        <a href="index.html">Carte</a> |
+        <a href="confidentialite.html">Confidentialité</a> |
+        <a href="tutoriel.html">Tutoriel</a> 
+    </nav>
+    <div id="connexion-status">Statut : Chargement initial...</div>
 
-<div id="connexion-status">Statut : Chargement initial...</div>
+    <div id="main-container">
+        <div id="cy"></div>
 
-<div id="main-container">
-    <div id="cy"></div>
+        <div id="control-panel" class="draggable-panel" style="top: 10px; left: 10px; display: block;">
+            
+            <h3>🔍 Localiser un Utilisateur/Serveur</h3>
+            <input type="text" id="search-input" placeholder="Nom ou ID à chercher">
+            <button id="btn-search-node" class="control-button">Localiser</button>
+            <hr>
 
-    <div id="control-panel" class="draggable-panel" style="top: 10px; left: 10px; display: block;">
-        
-        <h3>🔍 Localiser un Utilisateur/Serveur</h3>
-        <input type="text" id="search-input" placeholder="Nom ou ID à chercher">
-        <button id="btn-search-node" class="control-button">Localiser</button>
-        <hr>
-
-        <h3>📍 Trouver un Trajet Social</h3>
-        <label for="trajet-source">Utilisateur Source (Nom/ID) :</label>
-        <input type="text" id="trajet-source" placeholder="Utilisateur 1">
-        
-        <label for="trajet-target">Utilisateur Cible (Nom/ID) :</label>
-        <input type="text" id="trajet-target" placeholder="Utilisateur 2">
-        
-        <button id="btn-find-path" class="control-button">Calculer le Trajet</button>
-        <p id="path-result" style="font-size: 0.9em; margin-top: 10px; color: #b9bbbe;"></p>
-    </div>
-    <div id="details-panel" class="draggable-panel" style="top: 10px; right: 10px; width: 300px; cursor: default; display:none;">
-        <h2>Détails du Nœud</h2>
-        <div id="details-content">
-            Cliquez sur un utilisateur sur le graphe pour voir les détails ici.
+            <h3>📍 Trouver un Trajet Social</h3>
+            <label for="trajet-source">Utilisateur Source (Nom/ID) :</label>
+            <input type="text" id="trajet-source" placeholder="Utilisateur 1">
+            
+            <label for="trajet-target">Utilisateur Cible (Nom/ID) :</label>
+            <input type="text" id="trajet-target" placeholder="Utilisateur 2">
+            
+            <button id="btn-find-path" class="control-button">Calculer le Trajet</button>
+            <p id="path-result" style="font-size: 0.9em; margin-top: 10px; color: #b9bbbe;"></p>
+        </div>
+        <div id="details-panel" class="draggable-panel" style="top: 10px; right: 10px; width: 300px; cursor: default; display:none;">
+            <h2>Détails du Nœud</h2>
+            <div id="details-content">
+                Cliquez sur un utilisateur sur le graphe pour voir les détails ici.
+            </div>
         </div>
     </div>
-</div>
+    
+    <script src="frontend/app.js"></script>
+</body>
+</html>
