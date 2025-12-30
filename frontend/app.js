@@ -11,7 +11,7 @@ let graphData = {
 
 // --- CONFIGURATION LOCALE ---
 const CLIENT_ID = '1454871638972694738'; 
-const REDIRECT_URI = 'https://friendtree0.github.io/'; 
+const REDIRECT_URI = 'https://friendtree0.github.io/frontend/index.html'; 
 const SCOPE = 'identify guilds'; 
 const DISCORD_API_URL = 'https://discord.com/api/v10';
 // URL publique de votre serveur Proxy Render
