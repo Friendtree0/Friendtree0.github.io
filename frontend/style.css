@@ -52,37 +52,42 @@ body, html {
 /* --- Styles des Panneaux Flottants (Déplaçables) --- */
 
 .draggable-panel {
-    position: absolute;
+    /* Conserver les styles existants (couleur, bordure, z-index, etc.) */
+    position: absolute; /* Rétablit la base, sera écrasé par les IDs spécifiques */
     padding: 15px;
-    background-color: rgba(47, 49, 54, 0.95); /* Couleur foncée de Discord */
+    background-color: rgba(47, 49, 54, 0.95); 
     border: 1px solid #4f545c;
     border-radius: 8px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     z-index: 10;
     color: #dcddde;
-    user-select: none; /* Empêche la sélection de texte lors du glisser-déposer */
+    user-select: none; 
     max-width: 300px;
 }
 
-/* Positionnement initial des panneaux */
+/* 1. Panneau de Contrôle Principal : FIXE en haut à gauche */
 #control-panel {
+    position: fixed; /* Rend le panneau immobile par rapport à la fenêtre */
     top: 20px;
     left: 20px;
     width: 280px;
 }
 
-#details-panel {
-    top: 400px;
-    left: 20px;
-    width: 280px;
-}
-
+/* 2. Panneau des Outils d'Analyse Avancée : FIXE en haut à droite */
 #controls-panel {
+    position: fixed; /* Rend le panneau immobile par rapport à la fenêtre */
     top: 20px;
     right: 20px;
     width: 280px;
 }
 
+/* 3. Panneau des Détails de l'Élément : ABSOLU/DÉPLAÇABLE (par rapport à la zone scrollable, mais fixé par JS) */
+#details-panel {
+    position: absolute; /* Laisse le panneau se déplacer librement */
+    top: 400px; /* Position initiale */
+    left: 20px; /* Position initiale */
+    width: 280px;
+}
 .panel-header {
     cursor: move; /* Indique que le panneau peut être déplacé */
     margin-top: 0;
@@ -213,3 +218,4 @@ button:hover {
     border-radius: 4px;
     font-size: 0.9em;
 }
+
