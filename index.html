@@ -3,84 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Social Graph</title>
+    <title>FriendTree - Graphe Social Discord</title>
     
-    <link rel="stylesheet" href="frontend/style.css"> 
-    <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.0/cytoscape.min.js"></script>
+    
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Discord Social Graph</h1>
-        <div id="controls">
-    <button id="btn-discord-connect">Se connecter via Discord</button> 
-    
-    <button id="btn-reload-map" title="Recharge les données depuis la base de données persistante">Recharger la Carte (DB)</button>
-    
-    <button id="btn-toggle-servers" title="Afficher/Masquer les nœuds de serveurs">Afficher les Serveurs</button>
-    
-    <button id="btn-reset">Réinitialiser la Carte Locale</button> 
-</div>
-    </header>
 
-    <nav class="main-nav">
-        <a href="index.html">Carte</a> |
-        <a href="confidentialite.html">Confidentialité</a> |
-        <a href="tutoriel.html">Tutoriel</a> 
-    </nav>
-    <div id="connexion-status">Statut : Chargement initial...</div>
-
-    <div id="main-container">
-        <div id="loader-overlay" style="display: none;">
+    <div id="loader-overlay">
+        <div class="loader-content">
             <div class="spinner"></div>
-            <p>Analyse des données sociales...</p>
+            <p>Chargement des données...</p>
         </div>
+    </div>
+
+    <div id="cy"></div>
+
+    <div id="control-panel" class="draggable-panel">
+        <h2 class="panel-header">🛰️ Contrôles du Graphe</h2>
+        <p id="connexion-status">Statut : Non connecté.</p>
         
-        <div id="cy"></div>
-
-        <div id="control-panel" class="draggable-panel" style="top: 10px; left: 10px; display: block;">
-            
-            <h3>🔍 Localiser un Utilisateur/Serveur</h3>
-            <input type="text" id="search-input" placeholder="Nom ou ID à chercher">
-            <button id="btn-search-node" class="control-button">Localiser</button>
-            <hr>
-
-            <h3>📍 Trouver un Trajet Social</h3>
-            <label for="trajet-source">Utilisateur Source (Nom/ID) :</label>
-            <input type="text" id="trajet-source" placeholder="Utilisateur 1">
-            
-            <label for="trajet-target">Utilisateur Cible (Nom/ID) :</label>
-            <input type="text" id="trajet-target" placeholder="Utilisateur 2">
-            
-            <button id="btn-find-path" class="control-button">Calculer le Trajet</button>
-            <p id="path-result" style="font-size: 0.9em; margin-top: 10px; color: #b9bbbe;"></p>
+        <hr>
+        
+        <div id="controls">
+            <button id="btn-discord-connect" title="Lance le processus d'autorisation Discord pour collecter les données de l'utilisateur.">Connecter Discord</button>
+            <button id="btn-reload-map" title="Recharge les données depuis la base de données persistante et met à jour le graphe.">Recharger la Carte (DB)</button>
+            <button id="btn-toggle-servers" title="Afficher/Masquer les nœuds des serveurs Discord.">Afficher les Serveurs</button>
+            <button id="btn-reset" title="Réinitialise la vue locale du graphe (ne supprime pas la DB).">Réinitialiser la Carte Locale</button>
         </div>
-        <div id="details-panel" class="draggable-panel" style="top: 10px; right: 10px; width: 300px; cursor: default; display:none;">
-            <h2>Détails du Nœud</h2>
-            <div id="details-content">
-                Cliquez sur un utilisateur sur le graphe pour voir les détails ici.
-            </div>
+
+        <hr>
+
+        <h3>🔍 Localisation et Trajet</h3>
+        <label for="search-input">Rechercher Nœud (Nom/ID) :</label>
+        <input type="text" id="search-input" placeholder="ID Discord ou Nom">
+        <button id="btn-search-node">Localiser</button>
+
+        <br>
+        
+        <label for="trajet-source">Trajet (Source Nom/ID) :</label>
+        <input type="text" id="trajet-source" placeholder="Source Nom/ID">
+        <label for="trajet-target">Trajet (Cible Nom/ID) :</label>
+        <input type="text" id="trajet-target" placeholder="Cible Nom/ID">
+        <button id="btn-find-path">Trouver le Trajet Social</button>
+        <div id="path-result"></div>
+
+    </div>
+
+    <div id="details-panel" class="draggable-panel" style="display:none;">
+        <h2 class="panel-header">📊 Détails de l'Élément</h2>
+        <div id="details-content">
+            <p>Cliquez sur un nœud pour afficher les détails.</p>
         </div>
     </div>
     
-    <div id="discord-modal" class="modal" style="display: none;"> 
+    <div id="controls-panel" class="draggable-panel">
+        <h2 class="panel-header">⚙️ Outils d'Analyse Avancée</h2>
+
+        <h3>Disposition (Layout)</h3>
+        <button id="layout-cose">Cose (Réseau Social)</button>
+        <button id="layout-concentric">Concentric (Regroupement)</button>
+        
+        <hr>
+        <h3>Exporter le Graphe</h3>
+        <button id="export-png">Télécharger en PNG</button>
+        
+        <hr>
+        <h3>Filtrage des Liens Faibles</h3>
+        <p>Masquer les liens avec moins de serveurs en commun.</p>
+        <label for="weight-filter">Min. Serveurs en Commun: <span id="current-weight">1</span></label>
+        <input type="range" id="weight-filter" min="1" max="10" value="1">
+
+        <hr>
+        <h3>Analyse Nœuds/Liens (Centralité)</h3>
+        <div id="analysis-detail">
+            <p>Cliquez sur un nœud (utilisateur) pour ses métriques de centralité ou sur un lien pour voir le poids.</p>
+        </div>
+    </div>
+
+
+    <div id="discord-modal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
-            <h2>🔒 Connexion sécurisée via Discord</h2>
-            <p>En cliquant sur "Continuer", vous serez redirigé vers le site officiel de Discord pour autoriser notre application.</p>
-            
-            <h3>Ce que nous collectons :</h3>
-            <ul>
-                <li>Votre ID utilisateur (pour vous identifier).</li>
-                <li>Votre nom d'utilisateur public (pour l'affichage sur la carte).</li>
-                <li>La liste des serveurs que vous avez en commun avec les autres utilisateurs déjà enregistrés.</li>
-            </ul>
-            
-            <p style="font-weight: bold; color: #f04747;">⚠️ Aucune donnée de message, historique ou canal privé n'est collectée.</p>
-
-            <button id="btn-modal-continue" class="control-button" style="width: 100%; margin-top: 20px;">Continuer vers Discord</button>
+            <h2>Autorisation Discord</h2>
+            <p>Vous allez être redirigé vers Discord pour autoriser l'application à lire votre liste de serveurs et votre profil. Vos données seront ensuite sauvegardées sur notre base de données persistante pour créer le graphe social.</p>
+            <p>Ceci est un processus sécurisé via le protocole OAuth2 de Discord.</p>
+            <button id="btn-modal-continue">Continuer vers Discord</button>
         </div>
     </div>
-    
-    <script src="frontend/app.js"></script>
+
+    <script src="app.js"></script>
+
 </body>
 </html>
