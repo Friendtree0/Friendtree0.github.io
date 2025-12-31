@@ -743,8 +743,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Rendre les panneaux déplaçables
     const controlPanel = document.getElementById('control-panel');
     const controlsPanel = document.getElementById('controls-panel');
-    if(controlPanel) makeDraggable(controlPanel);
-    if(controlsPanel) makeDraggable(controlsPanel); 
+    if(controlPanel) makeDraggable(controlPanel); // <--- Problème ici
+    if(controlsPanel) makeDraggable(controlsPanel); // <--- Problème ici
+    const detailsPanel = document.getElementById('details-panel');
+    if(detailsPanel) makeDraggable(detailsPanel);
     
     document.getElementById('btn-search-node').addEventListener('click', rechercherNoeud);
     document.getElementById('btn-find-path').addEventListener('click', trouverTrajetSocial);
