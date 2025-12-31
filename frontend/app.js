@@ -1,14 +1,12 @@
-// Fichier : frontend/app.js (Code Complet Final et Optimisé pour la densité)
+// Fichier : frontend/app.js (Code Complet Final avec Outils d'Analyse)
 // -------------------------------------------------------------------
 
 let cy = null; 
 let graphData = { utilisateurs: [], relations: [], serveurs: [] };
-// Les serveurs sont cachés par défaut pour la clarté du réseau social
 let serversVisible = false; 
 let serversHiddenLayout; 
 
 // --- CONFIGURATION LOCALE ---
-// ATTENTION : Si ces valeurs ne sont pas correctes, rien ne fonctionnera.
 const CLIENT_ID = '1454871638972694738'; 
 const REDIRECT_URI = 'https://friendtree0.github.io/'; 
 const SCOPE = 'identify guilds'; 
@@ -40,6 +38,7 @@ const makeDraggable = (element) => {
 
     const dragMouseDown = (e) => {
         e = e || window.event;
+        // Permet d'interagir avec les éléments du panneau sans le déplacer
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.tagName === 'LABEL' || e.target.tagName === 'HR') return;
 
         e.preventDefault();
@@ -75,7 +74,7 @@ const makeDraggable = (element) => {
 };
 
 
-// --- Fonction pour afficher les détails du nœud ---
+// --- Fonction pour afficher les détails du nœud (Panneau de Gauche) ---
 const afficherDetailsNoeud = (nodeId) => {
     const nodeData = graphData.utilisateurs.find(u => u.id === nodeId) || graphData.serveurs.find(s => s.id === nodeId);
     const detailsContainer = document.getElementById('details-content');
@@ -214,25 +213,11 @@ const toggleServers = () => {
     const button = document.getElementById('btn-toggle-servers');
 
     if (serversVisible) {
-        serversHiddenLayout = cy.json();
         servers.hide();
         linksToServers.hide();
         
-        const newLayout = cy.layout({
-            name: 'cose', // Layout Cose pour un meilleur contrôle de l'espacement
-            fit: true, 
-            padding: 50, 
-            animate: true, 
-            animationDuration: 800,
-            // Paramètres pour un rapprochement modéré
-            nodeRepulsion: function(node){ return 20000; }, 
-            idealEdgeLength: function(edge){ return 10; },
-            initialTemp: 50,
-            ready: function() {
-                serversHiddenLayout = cy.json();
-            }
-        });
-        newLayout.run();
+        // Relance le layout Cose (dense)
+        applyLayout('cose', true);
         
         serversVisible = false;
         button.textContent = "Afficher les Serveurs";
@@ -242,20 +227,174 @@ const toggleServers = () => {
         linksToServers.show();
 
         if (serversHiddenLayout) {
-             // Si on a sauvegardé l'état du layout avant de cacher, on le restaure.
+             // Restaure la position précédente avant l'application du layout dense
              cy.json(serversHiddenLayout);
-             // On peut relancer un concentric rapide pour une vue globale
-             cy.layout({ name: 'concentric', fit: true, padding: 30 }).run(); 
-        } else {
-             // Sinon, on relance le layout complet
-             cy.layout({ name: 'concentric', fit: true, padding: 30 }).run();
         }
+        
+        // Relance le layout Concentric (global)
+        applyLayout('concentric', true);
 
         serversVisible = true;
         button.textContent = "Masquer les Serveurs";
         document.getElementById('connexion-status').textContent = "Statut : Les nœuds de serveurs sont affichés.";
     }
 };
+
+
+// --- NOUVELLES FONCTIONS DE LAYOUTS ET EXPORT (POINTS 2.1) ---
+
+/**
+ * Applique un nouveau layout au graphe.
+ * @param {string} name - Le nom du layout (ex: 'cose', 'concentric').
+ * @param {boolean} isToggle - Indique si c'est appelé par le toggle des serveurs (pour la sauvegarde).
+ */
+function applyLayout(name, isToggle = false) {
+    if (!cy) return;
+    
+    // Sauvegarder l'état actuel AVANT le layout, si on bascule en mode masqué
+    if (isToggle && name === 'cose') {
+        serversHiddenLayout = cy.json();
+    }
+    
+    cy.layout({
+        name: name,
+        animate: true,
+        animationDuration: 700,
+        padding: 50,
+        fit: true,
+        // Paramètres pour 'cose' (Rapprochement actif)
+        ...(name === 'cose' && {
+            nodeRepulsion: function(node){ return 20000; }, 
+            idealEdgeLength: function(edge){ return 10; },
+            initialTemp: 50,
+        }),
+        // Paramètres pour 'concentric' (Groupement par Degré)
+        ...(name === 'concentric' && {
+            concentric: function(node) {
+                // Centre les nœuds les plus connectés
+                // Utilise le degré des nœuds de type 'utilisateur'
+                return node.data('type') === 'utilisateur' ? node.degree() : 0; 
+            },
+            levelWidth: function(nodes) {
+                return 1.5;
+            },
+            minNodeSpacing: 50
+        }),
+        ready: function() {
+            if (isToggle && name === 'cose') {
+                // S'assurer que le layout final est enregistré pour le retour
+                serversHiddenLayout = cy.json();
+            }
+        }
+    }).run();
+}
+
+
+// Fonction pour l'exportation PNG
+const exportPng = () => {
+    if (!cy) return;
+    
+    // Crée une image PNG du graphe (full: true capture tout le graphe)
+    const png64 = cy.png({ 
+        output: 'base64', 
+        full: true, 
+        scale: 2 // Mise à l'échelle pour une meilleure résolution
+    });
+
+    // Déclenche le téléchargement
+    const a = document.createElement('a');
+    a.href = png64;
+    a.download = 'FriendTree_Export.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+};
+
+// --- NOUVELLES FONCTIONS DE FILTRAGE (POINTS 2.2) ---
+
+/**
+ * Filtre les liens de type 'serveur_commun' en fonction d'un poids minimum.
+ * @param {number} minWeight - Le nombre minimum de serveurs en commun requis.
+ */
+function applyWeightFilter(minWeight) {
+    if (!cy) return;
+    
+    // 1. S'assurer que les liens serveurs_commun sont visibles pour ne pas masquer les autres liens
+    cy.edges('[type = "serveur_commun"]').show(); 
+    
+    // 2. Masquer les arêtes 'serveur_commun' dont le poids est strictement inférieur au minimum.
+    // Poids est stocké dans 'weight'
+    cy.edges(`[type = "serveur_commun"][weight < ${minWeight}]`).hide();
+    
+    // Optionnel : relancer un layout après filtrage pour rapprocher les groupes restants
+    // applyLayout('cose'); 
+}
+
+
+// --- NOUVELLE FONCTION D'ANALYSE (POINTS 2.3) ---
+
+/**
+ * Calcule et affiche les métriques de centralité et les détails des liens.
+ * @param {object} target - Le nœud ou l'arête Cytoscape cliqué.
+ */
+function analyzeElement(target) {
+    const analysisDetail = document.getElementById('analysis-detail');
+
+    if (target.isNode()) {
+        const node = target;
+        const nodeData = node.data();
+        
+        const degree = node.degree();
+        let betweenness = "Calcul en cours...";
+        
+        // La librairie 'cytoscape.js' fournit des algorithmes de base
+        // Le calcul de la Centralité d'Intermédiarité est coûteux.
+        try {
+            // Entre la centralité sur les éléments visibles du graphe social (serveur_commun)
+            const centrality = cy.elements('[type != "membre_de"]').betweennessCentrality({
+                weight: function(edge) { return 1 / edge.data('weight'); }, // Poids inversé: plus de serveurs = chemin plus facile
+            });
+            betweenness = centrality.betweenness(node).toFixed(3);
+        } catch (e) {
+             betweenness = "Extension non chargée";
+        }
+        
+        analysisDetail.innerHTML = `
+            <h4>Analyse de ${nodeData.label}</h4>
+            <p><strong>Type:</strong> ${nodeData.type === 'utilisateur' ? 'Utilisateur' : 'Serveur'}</p>
+            <ul>
+                <li>**Degré (Liens directs)** : ${degree}</li>
+                <li>**Centralité d'Intermédiarité** : ${betweenness}</li>
+            </ul>
+            <p style="font-size:0.8em; color:#666;">La centralité d'intermédiarité indique le rôle de "pont" dans le réseau social (plus c'est élevé, plus l'utilisateur est crucial pour les connexions indirectes).</p>
+        `;
+
+    } else if (target.isEdge()) {
+        const edge = target;
+        const edgeData = edge.data();
+        
+        if (edgeData.type === 'serveur_commun') {
+            // NÉCESSITE de stocker 'common_servers' dans le backend pour être complet, 
+            // mais nous affichons déjà les infos de base.
+            
+            analysisDetail.innerHTML = `
+                <h4>Analyse de la Relation Sociale</h4>
+                <p>Entre ${edge.source().data('label')} et ${edge.target().data('label')}</p>
+                <ul>
+                    <li>**Type de Lien** : Serveurs en Commun</li>
+                    <li>**Poids (Nb. de Serveurs)** : <strong>${edgeData.weight}</strong></li>
+                </ul>
+                <p style="font-size:0.8em; color:#666;">Ce poids correspond au nombre de serveurs Discord qu'ils partagent.</p>
+            `;
+        } else {
+             analysisDetail.innerHTML = `
+                <h4>Analyse de la Relation</h4>
+                <p>Type de lien : **${edgeData.type}** (Lien fort)</p>
+                <p>Ce lien représente une appartenance directe à un serveur Discord.</p>
+            `;
+        }
+    }
+}
 
 
 // --- Fonctions de construction de graphe ---
@@ -339,22 +478,11 @@ const mettreAJourGraphe = (utilisateurs, relations, serveurs, forceRedraw = fals
         const linksToServers = cy.edges('[type = "membre_de"]');
 
         if (servers.length > 0) {
-            serversHiddenLayout = cy.json(); // Sauvegarde l'état initial complet
             servers.hide();
             linksToServers.hide();
             
-            // Relance un layout COSE pour compacter activement les utilisateurs restants
-            cy.layout({ 
-                name: 'cose', 
-                fit: true, 
-                padding: 50,
-                animate: true,
-                animationDuration: 700,
-                // PARAMÈTRES POUR LE RAPPROCEMENT
-                nodeRepulsion: function(node){ return 20000; }, // Réduit fortement la répulsion
-                idealEdgeLength: function(edge){ return 10; }, // Tente de rapprocher les nœuds liés
-                initialTemp: 50, 
-            }).run(); 
+            // Relance le layout COSE pour compacter activement les utilisateurs restants
+            applyLayout('cose', true);
             
             serversVisible = false;
             document.getElementById('connexion-status').textContent += " (Serveurs masqués par défaut.)";
@@ -363,9 +491,18 @@ const mettreAJourGraphe = (utilisateurs, relations, serveurs, forceRedraw = fals
         }
         // ------------------------------------------------------------------
 
-        cy.on('tap', 'node', function(evt){
-            const node = evt.target;
-            afficherDetailsNoeud(node.id());
+        // Ajout de l'événement pour l'analyse
+        cy.on('tap', 'node, edge', function(evt){
+            const target = evt.target;
+            if (target.isNode()) {
+                // Pour le panneau de gauche (infos simples)
+                afficherDetailsNoeud(target.id());
+            } else {
+                 // S'assurer que le panneau de gauche est masqué si on clique sur un lien
+                 document.getElementById('details-panel').style.display = 'none';
+            }
+            // Pour le panneau de droite (analyse)
+            analyzeElement(target); 
         });
         
         cy.on('tap', function(evt){
@@ -375,6 +512,16 @@ const mettreAJourGraphe = (utilisateurs, relations, serveurs, forceRedraw = fals
                 document.getElementById('path-result').innerHTML = ''; 
             }
         });
+        
+        // Calculer la valeur max de 'weight' pour le filtre (sauf si on limite à 10)
+        const maxWeight = cy.edges('[type = "serveur_commun"]').max(e => e.data('weight')).value || 1;
+        const weightFilter = document.getElementById('weight-filter');
+        if (weightFilter) {
+            weightFilter.max = maxWeight;
+            weightFilter.value = 1;
+            document.getElementById('current-weight').textContent = 1;
+        }
+
 
     } catch (e) { 
         console.error("Erreur lors de l'initialisation de Cytoscape:", e); 
@@ -405,7 +552,8 @@ const detecterRelationsCommunes = () => {
             const guildsA = userGuilds.get(userA_ID);
             const guildsB = userGuilds.get(userB_ID);
             
-            const commonGuildsCount = Array.from(guildsA).filter(guildID => guildsB.has(guildID)).length;
+            const commonGuilds = Array.from(guildsA).filter(guildID => guildsB.has(guildID));
+            const commonGuildsCount = commonGuilds.length;
             
             if (commonGuildsCount > 0) {
                 const sortedIDs = [userA_ID, userB_ID].sort();
@@ -416,7 +564,9 @@ const detecterRelationsCommunes = () => {
                         source_id: userA_ID, 
                         cible_id: userB_ID, 
                         poids: commonGuildsCount,
-                        type: 'serveur_commun' 
+                        type: 'serveur_commun',
+                        // Optionnel : Stocker la liste des serveurs pour l'affichage (point 4)
+                        // common_servers: commonGuilds.map(id => graphData.serveurs.find(s => s.id === id)?.nom || id) 
                     });
                     commonLinks.add(linkKey);
                 }
@@ -459,7 +609,6 @@ const fusionnerEtAnalyserDonnees = (allStoredData) => {
 // --- LOGIQUE DISCORD / IMPORT ---
 
 const connecterDiscord = () => {
-    // Affiche la modale au lieu de rediriger directement
     document.getElementById('discord-modal').style.display = 'block';
 };
 
@@ -591,10 +740,11 @@ const reinitialiserGraphe = () => {
 // --- INITIALISATION DES ÉVÉNEMENTS ---
 document.addEventListener('DOMContentLoaded', () => {
     
+    // Rendre les panneaux déplaçables
     const controlPanel = document.getElementById('control-panel');
-    if(controlPanel) {
-        makeDraggable(controlPanel); 
-    }
+    const controlsPanel = document.getElementById('controls-panel');
+    if(controlPanel) makeDraggable(controlPanel);
+    if(controlsPanel) makeDraggable(controlsPanel); 
     
     document.getElementById('btn-search-node').addEventListener('click', rechercherNoeud);
     document.getElementById('btn-find-path').addEventListener('click', trouverTrajetSocial);
@@ -605,23 +755,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnModalContinue = document.getElementById('btn-modal-continue');
     const closeButton = document.querySelector('.close-button');
 
-    btnModalContinue.addEventListener('click', executeDiscordConnect);
+    if(btnModalContinue) btnModalContinue.addEventListener('click', executeDiscordConnect);
 
-    closeButton.addEventListener('click', () => {
+    if(closeButton) closeButton.addEventListener('click', () => {
         discordModal.style.display = 'none';
     });
 
-    window.addEventListener('click', (event) => {
-        if (event.target === discordModal) {
-            discordModal.style.display = 'none';
-        }
-    });
+    if(discordModal) {
+        window.addEventListener('click', (event) => {
+            if (event.target === discordModal) {
+                discordModal.style.display = 'none';
+            }
+        });
+    }
 
+    // Attacher les fonctions de base
+    document.getElementById('btn-reset').addEventListener('click', reinitialiserGraphe);
+    document.getElementById('btn-discord-connect').addEventListener('click', connecterDiscord); 
+    document.getElementById('btn-reload-map').addEventListener('click', rechargerCarte); 
+    document.getElementById('btn-toggle-servers').addEventListener('click', toggleServers);
 
-    document.getElementById('btn-reset').addEventListener('click', reinitialiserGraphe); // <-- Problème potentiel 1
-    document.getElementById('btn-discord-connect').addEventListener('click', connecterDiscord); // <-- Problème potentiel 2
-    document.getElementById('btn-reload-map').addEventListener('click', rechargerCarte); // <-- Problème potentiel 3
-    document.getElementById('btn-toggle-servers').addEventListener('click', toggleServers); // <-- Problème potentiel 4
+    // --- ÉVÉNEMENTS DES NOUVELLES FONCTIONNALITÉS ---
+
+    // 1. Layouts et Export
+    document.getElementById('layout-cose').addEventListener('click', () => applyLayout('cose'));
+    document.getElementById('layout-concentric').addEventListener('click', () => applyLayout('concentric'));
+    document.getElementById('export-png').addEventListener('click', exportPng);
+
+    // 2. Filtrage Avancé des Liens Faibles
+    const weightFilter = document.getElementById('weight-filter');
+    const currentWeightSpan = document.getElementById('current-weight');
+    
+    if (weightFilter) {
+        weightFilter.addEventListener('input', (e) => {
+            const minWeight = parseInt(e.target.value);
+            currentWeightSpan.textContent = minWeight;
+            applyWeightFilter(minWeight);
+        });
+    }
+    // ---------------------------------------------
 
     // Démarrer la gestion de la redirection et le chargement initial des données
     gererRedirectionOAuth();
