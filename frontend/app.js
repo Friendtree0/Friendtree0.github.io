@@ -740,11 +740,7 @@ const reinitialiserGraphe = () => {
 // --- INITIALISATION DES ÉVÉNEMENTS ---
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Rendre les panneaux déplaçables
-    const controlPanel = document.getElementById('control-panel');
-    const controlsPanel = document.getElementById('controls-panel');
-    if(controlPanel) makeDraggable(controlPanel); // <--- Problème ici
-    if(controlsPanel) makeDraggable(controlsPanel); // <--- Problème ici
+    
     const detailsPanel = document.getElementById('details-panel');
     if(detailsPanel) makeDraggable(detailsPanel);
     
