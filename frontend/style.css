@@ -1,250 +1,47 @@
-/* Fichier : frontend/style.css (CODE COMPLET FINAL) */
+/* Fichier : style.css */
 
-/* --- RESET & FOND (Discord Theme) --- */
-body {
+body, html {
     margin: 0;
     padding: 0;
-    font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color: #36393f; /* Arrière-plan sombre Discord */
-    color: #ffffff;
-    min-height: 100vh;
-}
-
-/* --- HEADER ET CONTRÔLES --- */
-header {
-    background-color: #2f3136; /* Couleur des canaux/panneaux Discord */
-    padding: 15px 20px;
-    border-bottom: 1px solid #202225;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap; 
-}
-
-header h1 {
-    font-size: 1.8em;
-    color: #ffffff;
-    margin: 0;
-}
-
-#controls {
-    display: flex;
-    gap: 10px; 
-    margin-top: 5px;
-}
-
-#controls button {
-    background-color: #5865f2; /* Bleu Discord */
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: background-color 0.2s;
-    white-space: nowrap; 
-}
-
-#controls button:hover {
-    background-color: #4752c4;
-}
-
-/* --- STATUT DE CONNEXION --- */
-#connexion-status {
-    background-color: #40444b;
-    color: #b9bbbe;
-    padding: 10px 20px;
-    font-size: 0.9em;
-    text-align: center;
-    border-bottom: 1px solid #202225;
-}
-
-/* --- CONTENEUR PRINCIPAL ET GRAPHE --- */
-#main-container {
-    display: flex;
-    position: relative;
-    height: calc(100vh - 145px); 
-    min-height: 500px;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #2c2f33; /* Couleur de fond Discord */
+    color: #dcddde;
 }
 
 #cy {
-    flex-grow: 1;
-    background-color: #36393f;
-    min-width: 50%;
-    height: 100%;
-    transition: opacity 0.3s; /* Pour l'effet de flou lors du chargement */
-}
-
-/* --- PANNEAU DE CONTRÔLE FLOTTANT (DRAGGABLE) --- */
-#control-panel {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 300px;
-    background-color: #2f3136;
-    border: 1px solid #202225;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    cursor: move; /* Rendu draggable */
-    z-index: 10;
-    padding: 15px;
-}
-
-#control-panel h3 {
-    color: #7289da;
-    font-size: 1.1em;
-    margin-top: 15px;
-    margin-bottom: 5px;
-}
-
-#control-panel label {
-    display: block;
-    color: #b9bbbe;
-    font-size: 0.85em;
-    margin-top: 10px;
-}
-
-#control-panel input[type="text"] {
-    width: calc(100% - 10px);
-    padding: 8px;
-    margin-top: 4px;
-    margin-bottom: 8px;
-    border: 1px solid #40444b;
-    border-radius: 4px;
-    background-color: #40444b;
-    color: white;
-}
-
-#control-panel hr {
-    border-color: #40444b;
-    margin: 15px 0;
-}
-
-#control-panel .control-button {
     width: 100%;
-    background-color: #5865f2;
-    color: white;
-    border: none;
-    padding: 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 5px;
-    transition: background-color 0.2s;
-}
-
-#control-panel .control-button:hover {
-    background-color: #4752c4;
-}
-
-
-/* --- PANNEAU DE DÉTAILS (NON-DRAGGABLE) --- */
-#details-panel {
+    height: 100%;
     position: absolute;
-    top: 10px;
-    right: 10px; 
-    width: 300px;
-    background-color: #2f3136;
-    border: 1px solid #202225;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    cursor: default; /* Non-draggable */
-    z-index: 10;
-    padding: 15px;
+    top: 0;
+    left: 0;
+    z-index: 1; /* Le graphe est en arrière-plan */
 }
 
-#details-panel h2 {
-    color: #7289da;
-    font-size: 1.2em;
-    margin-top: 0;
-    padding-bottom: 5px;
-    border-bottom: 1px solid #4f545c;
-}
-
-#details-content p {
-    margin: 5px 0;
-    font-size: 0.9em;
-}
-
-#details-content strong {
-    color: #ffffff;
-}
-
-#details-content code {
-    background-color: #40444b;
-    padding: 2px 4px;
-    border-radius: 3px;
-    font-family: 'Consolas', monospace;
-    font-size: 0.85em;
-    color: #d1d2d3;
-    user-select: all; 
-    cursor: text;
-}
-
-
-/* --- NAVIGATION ET PAGES D'INFORMATION --- */
-
-.main-nav {
-    text-align: center;
-    padding: 10px 0;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #4f545c;
-    background-color: #2c2f33; 
-}
-
-.main-nav a {
-    color: #99aab5;
-    text-decoration: none;
-    padding: 0 15px;
-    font-weight: bold;
-    transition: color 0.2s;
-}
-
-.main-nav a:hover {
-    color: #ffffff; 
-}
-
-/* --- CYTOSCAPE STYLES (Focus et Trajet) --- */
-
-/* Style pour mettre en évidence un nœud (Localiser et Trajet) */
-#cy .highlighted {
-    border-width: 5px !important; 
-    border-color: #ffcc00 !important; /* Jaune vif pour le focus */
-    z-index: 100;
-}
-
-/* Style pour mettre en évidence les arêtes (Trajet) */
-#cy .path {
-    line-color: #ffcc00 !important; /* Jaune vif pour le chemin */
-    width: 5 !important;
-    z-index: 90;
-}
-
-/* --- STYLE VISUEL (LOADER) --- */
+/* --- Loader Overlay --- */
 #loader-overlay {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(30, 32, 36, 0.9); /* Fond légèrement transparent */
+    background-color: rgba(0, 0, 0, 0.8);
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Assurez-vous qu'il est au-dessus du graphe */
-    color: #b9bbbe;
-    font-size: 1.1em;
+    z-index: 9999;
+    color: white;
+    text-align: center;
 }
 
-/* Spinner CSS (animation simple) */
 .spinner {
-    border: 8px solid #4f545c;
-    border-top: 8px solid #7289da; /* Bleu Discord */
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #7289da; /* Bleu Discord */
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     animation: spin 1s linear infinite;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 @keyframes spin {
@@ -252,46 +49,136 @@ header h1 {
     100% { transform: rotate(360deg); }
 }
 
-/* --- STYLE MODAL (POPUP) --- */
+/* --- Styles des Panneaux Flottants (Déplaçables) --- */
+
+.draggable-panel {
+    position: absolute;
+    padding: 15px;
+    background-color: rgba(47, 49, 54, 0.95); /* Couleur foncée de Discord */
+    border: 1px solid #4f545c;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    color: #dcddde;
+    user-select: none; /* Empêche la sélection de texte lors du glisser-déposer */
+    max-width: 300px;
+}
+
+/* Positionnement initial des panneaux */
+#control-panel {
+    top: 20px;
+    left: 20px;
+    width: 280px;
+}
+
+#details-panel {
+    top: 400px;
+    left: 20px;
+    width: 280px;
+}
+
+#controls-panel {
+    top: 20px;
+    right: 20px;
+    width: 280px;
+}
+
+.panel-header {
+    cursor: move; /* Indique que le panneau peut être déplacé */
+    margin-top: 0;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #4f545c;
+}
+
+/* --- Éléments de Formulaire et Boutons --- */
+
+h2, h3 {
+    color: #7289da; /* Bleu Discord */
+    margin-top: 15px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #4f545c;
+    margin: 10px 0;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+
+input[type="text"] {
+    width: 95%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #4f545c;
+    background-color: #202225;
+    color: #dcddde;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    color: white;
+    background-color: #5865f2; /* Couleur principale */
+}
+
+button:hover {
+    background-color: #4752c4;
+}
+
+#btn-discord-connect {
+    background-color: #7289da;
+}
+
+#btn-discord-connect:hover {
+    background-color: #677bc4;
+}
+
+/* --- Styles spécifiques au Cytoscape --- */
+
+/* Classes de Mise en Évidence (ajoutées par JS) */
+.highlighted {
+    /* Style défini dans app.js pour le border color */
+}
+
+.path {
+    /* Style défini dans app.js pour le line-color */
+}
+
+/* --- Modale --- */
 .modal {
-    position: fixed;
-    z-index: 2000; /* Au-dessus de tout */
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.7); 
-    /* display: none; est géré par JS et par le style inline dans le HTML */
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.7); 
 }
 
 .modal-content {
-    background-color: #2f3136;
-    margin: 10% auto; /* Centrage vertical et horizontal */
-    padding: 25px;
-    border: 1px solid #202225;
-    width: 80%;
-    max-width: 500px;
+    background-color: #36393f; 
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
+    max-width: 400px;
     border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-    animation: modalopen 0.4s;
-}
-
-@keyframes modalopen {
-    from {opacity: 0; transform: translateY(-50px);}
-    to {opacity: 1; transform: translateY(0);}
-}
-
-.modal-content h2 {
-    color: #7289da;
-    border-bottom: 1px solid #4f545c;
-    padding-bottom: 10px;
-}
-
-.modal-content ul {
-    list-style-type: disc;
-    padding-left: 25px;
-    color: #d1d2d3;
+    text-align: center;
 }
 
 .close-button {
@@ -299,8 +186,6 @@ header h1 {
     float: right;
     font-size: 28px;
     font-weight: bold;
-    cursor: pointer;
-    transition: color 0.2s;
 }
 
 .close-button:hover,
@@ -308,4 +193,23 @@ header h1 {
     color: white;
     text-decoration: none;
     cursor: pointer;
+}
+
+#btn-modal-continue {
+    margin-top: 20px;
+}
+
+/* Style pour le filtre de poids */
+#weight-filter {
+    width: 95%;
+    margin-bottom: 15px;
+    accent-color: #7289da;
+}
+
+#path-result {
+    margin-top: 10px;
+    padding: 5px;
+    border: 1px solid #4f545c;
+    border-radius: 4px;
+    font-size: 0.9em;
 }
