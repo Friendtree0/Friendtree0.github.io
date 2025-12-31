@@ -70,6 +70,8 @@ const makeDraggable = (element) => {
         document.onmousemove = null;
     };
 
+    // Le glisser-déposer est uniquement appliqué aux éléments qui doivent être mobiles (e.g., details-panel)
+    // Les panneaux de contrôle et d'analyse sont positionnés en CSS à 'fixed'.
     element.onmousedown = dragMouseDown;
 };
 
@@ -213,6 +215,9 @@ const toggleServers = () => {
     const button = document.getElementById('btn-toggle-servers');
 
     if (serversVisible) {
+        // Sauvegarde de la position actuelle avant de cacher
+        serversHiddenLayout = cy.json(); 
+
         servers.hide();
         linksToServers.hide();
         
@@ -290,24 +295,37 @@ function applyLayout(name, isToggle = false) {
 }
 
 
-// Fonction pour l'exportation PNG
+// FONCTION CORRIGÉE POUR L'EXPORTATION PNG
 const exportPng = () => {
-    if (!cy) return;
+    if (!cy) {
+        document.getElementById('analysis-detail').innerHTML = `<p style="color:red;">Erreur: Graphe non chargé pour l'exportation.</p>`;
+        return;
+    }
     
-    // Crée une image PNG du graphe (full: true capture tout le graphe)
-    const png64 = cy.png({ 
-        output: 'base64', 
-        full: true, 
-        scale: 2 // Mise à l'échelle pour une meilleure résolution
-    });
+    try {
+        // 1. Générer la chaîne Base64 du graphe
+        const png64 = cy.png({ 
+            output: 'base64', 
+            full: true, // Capture tout le graphe
+            scale: 2    // Haute résolution
+        });
 
-    // Déclenche le téléchargement
-    const a = document.createElement('a');
-    a.href = png64;
-    a.download = 'FriendTree_Export.png';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+        // 2. Créer un élément de lien temporaire pour déclencher le téléchargement
+        const a = document.createElement('a');
+        a.href = png64;
+        a.download = 'FriendTree_Export.png';
+        
+        // 3. Déclencher le clic pour forcer le téléchargement
+        document.body.appendChild(a);
+        a.click(); 
+        document.body.removeChild(a);
+        
+        document.getElementById('analysis-detail').innerHTML = `<p style="color:#43b581;">✅ Exportation PNG réussie ! Vérifiez vos téléchargements.</p>`;
+
+    } catch (e) {
+        console.error("Erreur lors de l'exportation PNG:", e);
+        document.getElementById('analysis-detail').innerHTML = `<p style="color:red;">❌ Échec de l'exportation PNG. Vérifiez les logs console.</p>`;
+    }
 };
 
 // --- NOUVELLES FONCTIONS DE FILTRAGE (POINTS 2.2) ---
@@ -466,61 +484,61 @@ const mettreAJourGraphe = (utilisateurs, relations, serveurs, forceRedraw = fals
     cyContainer.innerHTML = ''; 
     
     try {
-         // Layout initial basé sur concentric pour la première organisation
-         cy = cytoscape({
-            container: cyContainer, elements: elements, style: style,
-            layout: { name: 'concentric', fit: true, padding: 30, animate: true, animationDuration: 500 }
-        });
-        document.getElementById('connexion-status').textContent = `Graphe chargé : ${utilisateurs.length} utilisateurs, ${serveurs.length} serveurs.`;
-        
-        // --- Masquer les serveurs au chargement initial et optimiser l'espacement ---
-        const servers = cy.nodes('[type = "serveur"]');
-        const linksToServers = cy.edges('[type = "membre_de"]');
+           // Layout initial basé sur concentric pour la première organisation
+           cy = cytoscape({
+             container: cyContainer, elements: elements, style: style,
+             layout: { name: 'concentric', fit: true, padding: 30, animate: true, animationDuration: 500 }
+         });
+         document.getElementById('connexion-status').textContent = `Graphe chargé : ${utilisateurs.length} utilisateurs, ${serveurs.length} serveurs.`;
+         
+         // --- Masquer les serveurs au chargement initial et optimiser l'espacement ---
+         const servers = cy.nodes('[type = "serveur"]');
+         const linksToServers = cy.edges('[type = "membre_de"]');
 
-        if (servers.length > 0) {
-            servers.hide();
-            linksToServers.hide();
-            
-            // Relance le layout COSE pour compacter activement les utilisateurs restants
-            applyLayout('cose', true);
-            
-            serversVisible = false;
-            document.getElementById('connexion-status').textContent += " (Serveurs masqués par défaut.)";
-        } else {
-             serversVisible = true;
-        }
-        // ------------------------------------------------------------------
+         if (servers.length > 0) {
+             servers.hide();
+             linksToServers.hide();
+             
+             // Relance le layout COSE pour compacter activement les utilisateurs restants
+             applyLayout('cose', true);
+             
+             serversVisible = false;
+             document.getElementById('connexion-status').textContent += " (Serveurs masqués par défaut.)";
+         } else {
+              serversVisible = true;
+         }
+         // ------------------------------------------------------------------
 
-        // Ajout de l'événement pour l'analyse
-        cy.on('tap', 'node, edge', function(evt){
-            const target = evt.target;
-            if (target.isNode()) {
-                // Pour le panneau de gauche (infos simples)
-                afficherDetailsNoeud(target.id());
-            } else {
+         // Ajout de l'événement pour l'analyse
+         cy.on('tap', 'node, edge', function(evt){
+             const target = evt.target;
+             if (target.isNode()) {
+                 // Pour le panneau de gauche (infos simples)
+                 afficherDetailsNoeud(target.id());
+             } else {
                  // S'assurer que le panneau de gauche est masqué si on clique sur un lien
                  document.getElementById('details-panel').style.display = 'none';
-            }
-            // Pour le panneau de droite (analyse)
-            analyzeElement(target); 
-        });
-        
-        cy.on('tap', function(evt){
-            if(evt.target === cy){
-                document.getElementById('details-panel').style.display = 'none';
-                cy.elements().removeClass('path highlighted');
-                document.getElementById('path-result').innerHTML = ''; 
-            }
-        });
-        
-        // Calculer la valeur max de 'weight' pour le filtre (sauf si on limite à 10)
-        const maxWeight = cy.edges('[type = "serveur_commun"]').max(e => e.data('weight')).value || 1;
-        const weightFilter = document.getElementById('weight-filter');
-        if (weightFilter) {
-            weightFilter.max = maxWeight;
-            weightFilter.value = 1;
-            document.getElementById('current-weight').textContent = 1;
-        }
+             }
+             // Pour le panneau de droite (analyse)
+             analyzeElement(target); 
+         });
+         
+         cy.on('tap', function(evt){
+             if(evt.target === cy){
+                 document.getElementById('details-panel').style.display = 'none';
+                 cy.elements().removeClass('path highlighted');
+                 document.getElementById('path-result').innerHTML = ''; 
+             }
+         });
+         
+         // Calculer la valeur max de 'weight' pour le filtre (sauf si on limite à 10)
+         const maxWeight = cy.edges('[type = "serveur_commun"]').max(e => e.data('weight')).value || 1;
+         const weightFilter = document.getElementById('weight-filter');
+         if (weightFilter) {
+             weightFilter.max = maxWeight;
+             weightFilter.value = 1;
+             document.getElementById('current-weight').textContent = 1;
+         }
 
 
     } catch (e) { 
@@ -740,9 +758,12 @@ const reinitialiserGraphe = () => {
 // --- INITIALISATION DES ÉVÉNEMENTS ---
 document.addEventListener('DOMContentLoaded', () => {
     
-    
+    // CORRECTION : Rendre UNIQUEMENT le panneau des détails déplaçable.
     const detailsPanel = document.getElementById('details-panel');
     if(detailsPanel) makeDraggable(detailsPanel);
+    
+    // NOTE : control-panel et controls-panel ne sont PAS passés à makeDraggable
+    // pour qu'ils restent fixes grâce à position: fixed dans style.css.
     
     document.getElementById('btn-search-node').addEventListener('click', rechercherNoeud);
     document.getElementById('btn-find-path').addEventListener('click', trouverTrajetSocial);
@@ -778,7 +799,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Layouts et Export
     document.getElementById('layout-cose').addEventListener('click', () => applyLayout('cose'));
     document.getElementById('layout-concentric').addEventListener('click', () => applyLayout('concentric'));
-    document.getElementById('export-png').addEventListener('click', exportPng);
+    
+    // Événement d'export PNG (corrigé)
+    document.getElementById('export-png').addEventListener('click', exportPng); 
 
     // 2. Filtrage Avancé des Liens Faibles
     const weightFilter = document.getElementById('weight-filter');
