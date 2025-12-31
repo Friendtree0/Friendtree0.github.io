@@ -23,11 +23,15 @@ let db; // Variable globale pour la connexion à la base de données
 
 
 // --- CONFIGURATION DISCORD ---
-const CLIENT_SECRET = process.env.CLIENT_SECRET || 'o1a61io7d32n8g9KOwYKst1t7RVodscY'; 
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const CLIENT_ID = process.env.CLIENT_ID || '1454871638972694738'; 
 const REDIRECT_URI = process.env.REDIRECT_URI || 'https://friendtree0.github.io/';
 // -----------------------------
-
+if (!CLIENT_SECRET) {
+    console.error("❌ ERREUR DE SÉCURITÉ : La variable d'environnement CLIENT_SECRET n'est pas définie.");
+    console.error("Veuillez la définir sur la plateforme Render pour que le service démarre.");
+    process.exit(1); 
+}
 app.use(cors()); 
 
 // FONCTION DE CONNEXION À LA BASE DE DONNÉES (Exécutée au démarrage)
