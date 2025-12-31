@@ -1,11 +1,11 @@
-// Fichier : backend-proxy/server.js (VERSION MONGODB PERSISTANTE)
+// Fichier : backend-proxy/server.js (VERSION MONGODB PERSISTANTE ET KEEP-ALIVE)
 // -------------------------------------------------------------------
 
 const express = require('express');
 const fetch = require('node-fetch');
 const cors = require('cors'); 
 const { MongoClient } = require('mongodb'); // Import MongoDB
-const path = require('path');      
+const path = require('path'); 
 
 const app = express();
 const PORT = 3000; 
@@ -24,7 +24,7 @@ let db; // Variable globale pour la connexion à la base de données
 
 // --- CONFIGURATION DISCORD ---
 const CLIENT_SECRET = process.env.CLIENT_SECRET || 'o1a61io7d32n8g9KOwYKst1t7RVodscY'; 
-const CLIENT_ID = process.env.CLIENT_ID || '1454871638972694738';                    
+const CLIENT_ID = process.env.CLIENT_ID || '1454871638972694738'; 
 const REDIRECT_URI = process.env.REDIRECT_URI || 'https://friendtree0.github.io/';
 // -----------------------------
 
@@ -90,6 +90,26 @@ function preparerDonneesPourSauvegarde(userData, guildsData) {
         dateSauvegarde: new Date()
     };
 }
+
+
+// --- NOUVELLE FONCTIONNALITÉ : ENDPOINT DE STATUT (KEEP-ALIVE) ---
+// Ceci est l'endpoint à utiliser dans UptimeRobot (ou un service similaire)
+// URL à utiliser: https://friendtree0-github-io.onrender.com/api/status
+app.get('/api/status', (req, res) => {
+    // Réponse rapide pour indiquer que le serveur est éveillé.
+    // Ajout d'une vérification basique de la connexion à la base de données
+    const status = db ? "operational" : "db_disconnected";
+    
+    // Si la base de données n'est pas connectée, renvoyer 503 (Service Unavailable)
+    if (!db) {
+        console.warn("⚠️ Keep-Alive: DB non connectée, renvoi de 503.");
+        return res.status(503).json({ status: "fail", message: "Proxy est éveillé, mais la base de données est déconnectée." });
+    }
+    
+    console.log(`✅ Keep-Alive: Ping reçu à ${new Date().toLocaleTimeString()}. Proxy éveillé.`);
+    return res.status(200).json({ status: "ok", message: "Proxy est éveillé et opérationnel avec DB." });
+});
+// -----------------------------------------------------------------
 
 
 // 🔑 POINT DE TERMINAISON POUR L'ÉCHANGE DE CODE, LA RÉCUPÉRATION ET LA SAUVEGARDE
