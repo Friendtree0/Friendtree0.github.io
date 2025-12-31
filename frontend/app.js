@@ -618,11 +618,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // Attacher les fonctions de base
-    document.getElementById('btn-reset').addEventListener('click', reinitialiserGraphe);
-    document.getElementById('btn-discord-connect').addEventListener('click', connecterDiscord); 
-    document.getElementById('btn-reload-map').addEventListener('click', rechargerCarte); 
-    document.getElementById('btn-toggle-servers').addEventListener('click', toggleServers);
+    document.getElementById('btn-reset').addEventListener('click', reinitialiserGraphe); // <-- Problème potentiel 1
+    document.getElementById('btn-discord-connect').addEventListener('click', connecterDiscord); // <-- Problème potentiel 2
+    document.getElementById('btn-reload-map').addEventListener('click', rechargerCarte); // <-- Problème potentiel 3
+    document.getElementById('btn-toggle-servers').addEventListener('click', toggleServers); // <-- Problème potentiel 4
 
     // Démarrer la gestion de la redirection et le chargement initial des données
     gererRedirectionOAuth();
